@@ -8,13 +8,12 @@ package sv.com.tesa.ticket.models;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.LoginBean;
-import static sv.com.tesa.ticket.models.ConexionModel.conexion;
 
 /**
  *
  * @author Rodrigo
  */
-public class AccountModel extends ConexionModel{
+public class AccountModel extends Conexion{
     public boolean actualizarCuenta(String currentPass, String newPass)
     {
         try {

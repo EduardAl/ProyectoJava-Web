@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import sv.com.tesa.ticket.beans.DepartmentBean;
 import sv.com.tesa.ticket.models.AdminBossModel;
 import sv.com.tesa.ticket.models.AdminDeptModel;
@@ -24,32 +25,46 @@ import sv.com.tesa.ticket.models.AdminDeptModel;
  */
 @WebServlet(name = "DepartmentController", urlPatterns = {"/departamentos"})
 public class DepartmentController extends HttpServlet {
-static Logger log = Logger.getLogger(DepartmentController.class.getName());
+
+    static Logger log = Logger.getLogger(DepartmentController.class.getName());
     AdminDeptModel adminDeptModel = new AdminDeptModel();
     AdminBossModel adminBossModel = new AdminBossModel();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html; charset=Latin1");
         try (PrintWriter out = response.getWriter()) {
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
+                sesion.getAttribute("nombre");
+                if (!sesion.getAttribute("rol").toString().equals("Administrador")) {
+                    request.setAttribute("Error", "Error de usuario.");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("Error", "Debe iniciar sesión.");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+            }
             String operacion = request.getParameter("op");
             switch (operacion) {
                 case "listar":
                     listar(request, response);
                     break;
                 case "nuevo":
-                    nuevo(request, response);   
+                    nuevo(request, response);
                     break;
                 case "insertar":
-                    insertar(request, response);   
+                    insertar(request, response);
                     break;
                 case "obtener":
-                    obtener(request, response);   
+                    obtener(request, response);
                     break;
                 case "modificar":
-                    modificar(request, response);   
+                    modificar(request, response);
                     break;
                 case "eliminar":
-                    eliminar(request, response);   
+                    eliminar(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -65,12 +80,12 @@ static Logger log = Logger.getLogger(DepartmentController.class.getName());
      * @param response servlet response
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response){
-    try {
-        processRequest(request, response);
-    } catch (ServletException | IOException ex) {
-        java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            processRequest(request, response);
+        } catch (ServletException | IOException ex) {
+            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -113,15 +128,15 @@ static Logger log = Logger.getLogger(DepartmentController.class.getName());
             java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     private void insertar(HttpServletRequest request, HttpServletResponse response) {
         try {
             DepartmentBean departmentBean = new DepartmentBean();
             departmentBean.setId(request.getParameter("id"));
             departmentBean.setNombreDept(request.getParameter("nombre"));
 
-            if(adminDeptModel.ingresarDept(departmentBean))
-            {
-            request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
+            if (adminDeptModel.ingresarDept(departmentBean)) {
+                request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
                 request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
@@ -130,24 +145,23 @@ static Logger log = Logger.getLogger(DepartmentController.class.getName());
     }
 
     private void obtener(HttpServletRequest request, HttpServletResponse response) {
-    try {
-        String id = request.getParameter("id");
-        DepartmentBean departmentBean = adminDeptModel.obtenerDepatartamento(id);
-        request.setAttribute("departamento", departmentBean);
-        request.getRequestDispatcher("/Admin/Departamentos/EditarDepartamento.jsp").forward(request, response);
-    } catch (ServletException | IOException ex) {
-        java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            String id = request.getParameter("id");
+            DepartmentBean departmentBean = adminDeptModel.obtenerDepatartamento(id);
+            request.setAttribute("departamento", departmentBean);
+            request.getRequestDispatcher("/Admin/Departamentos/EditarDepartamento.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void modificar(HttpServletRequest request, HttpServletResponse response) {
         try {
             DepartmentBean departmentBean = new DepartmentBean();
-            
+
             departmentBean.setNombreDept(request.getParameter("nombre"));
             departmentBean.setId(request.getParameter("id"));
-            if(adminDeptModel.modificarDept(departmentBean))
-            {
+            if (adminDeptModel.modificarDept(departmentBean)) {
                 request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
                 request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
             }
@@ -157,18 +171,15 @@ static Logger log = Logger.getLogger(DepartmentController.class.getName());
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
-        if(adminDeptModel.eliminarDepartamento(request.getParameter("id")))
-            {
-                try {
-                    request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
-                    request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
-                } catch (ServletException | IOException ex) {
-                    java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        if (adminDeptModel.eliminarDepartamento(request.getParameter("id"))) {
+            try {
+                request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
+                request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
+            } catch (ServletException | IOException ex) {
+                java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        else
-        {
-            
+        } else {
+
         }
     }
 

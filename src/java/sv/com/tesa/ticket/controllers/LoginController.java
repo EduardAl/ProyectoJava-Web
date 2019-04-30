@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import sv.com.tesa.ticket.beans.Login;
-import sv.com.tesa.ticket.models.User;
+import sv.com.tesa.ticket.beans.LoginBean;
+import sv.com.tesa.ticket.models.LoginModel;
 
 /**
  *
@@ -30,8 +30,6 @@ public class LoginController extends HttpServlet {
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,8 +39,8 @@ public class LoginController extends HttpServlet {
             String password;
             correo = request.getParameter("usuario");
             password = request.getParameter("clave");
-            User user = new User();
-            Login usuario = user.validar(correo, password);
+            LoginModel user = new LoginModel();
+            LoginBean usuario = user.validar(correo, password);
             RequestDispatcher rd;
             HttpSession sesion = request.getSession(false);
             try {
@@ -64,51 +62,43 @@ public class LoginController extends HttpServlet {
                         rd.forward(request, response);
                     }
                 } else {
-                    System.out.println("entra1");
-                    if (usuario.getRol() != null) {
+                    if (LoginBean.getRol() != null) {
                         sesion = request.getSession(true);
-                        sesion.setAttribute("id", usuario.getId());
-                        sesion.setAttribute("rol", usuario.getRol());
-                        sesion.setAttribute("nombre", usuario.getNombre());
-                        sesion.setAttribute("correo", usuario.getCorreo());
-                        sesion.setAttribute("jefe", usuario.getJefe());
-                        sesion.setAttribute("departamento", usuario.getDepartamento());
+                        sesion.setAttribute("id", LoginBean.getId());
+                        sesion.setAttribute("rol", LoginBean.getRol());
+                        sesion.setAttribute("nombre", LoginBean.getNombre());
+                        sesion.setAttribute("correo", LoginBean.getCorreo());
+                        sesion.setAttribute("jefe", LoginBean.getJefe());
+                        sesion.setAttribute("departamento", LoginBean.getDepartamento());
+                        request.setAttribute("Error", usuario.getError());
                         if (sesion.getAttribute("rol").equals("Administrador")) {
-                            System.out.println("entra2");
                             rd = request.getRequestDispatcher("Admin/admin.jsp");
                             rd.forward(request, response);
                         } else if (sesion.getAttribute("rol").equals("Jefe de área funcional")) {
-                            System.out.println("entra3");
                             rd = request.getRequestDispatcher("Area/Funcional/Jefes/inicio.jsp");
                             rd.forward(request, response);
                         } else if (sesion.getAttribute("rol").equals("Empleado de área funcional")) {
-                            System.out.println("entra4");
                             rd = request.getRequestDispatcher("Area/Funcional/Empleado/inicio.jsp");
                             rd.forward(request, response);
                         } else if (sesion.getAttribute("rol").equals("efe de desarrollo")) {
-                            System.out.println("entra5");
                             rd = request.getRequestDispatcher("Area/Desarrollo/Jefes/inicio.jsp");
                             rd.forward(request, response);
                         } else if (sesion.getAttribute("rol").equals("Programador")) {
-                            System.out.println("entra6");
                             rd = request.getRequestDispatcher("Area/Desarrollo/Empleado/inicio.jsp");
                             rd.forward(request, response);
 
                         }
                     } else {
-                        System.out.println("entra7");
-                        sesion.setAttribute("Error", usuario.getError());
+                        request.setAttribute("Error", usuario.getError());
                         rd = request.getRequestDispatcher("index.jsp");
                         rd.forward(request, response);
                     }
 
                 }
             } catch (IOException | ServletException e) {
-                System.out.println("entra8");
             }
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("entra9");
         }
     }
 

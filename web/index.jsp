@@ -12,19 +12,7 @@
         <title>Inicio de sesión</title>
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     </head>
-    <%
-
-        if (request.getAttribute("Error") != null) {
-    %>
-
     <body>
-        <div class="alert alert-danger">
-            <strong>Error!</strong><%=request.getAttribute("Error")%>
-            <br>
-        </div>
-        <%
-            }//Findelif
-%>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-4">
@@ -42,6 +30,20 @@
                         <div class="form-group">
                             <button class="btn btn-lg btn-primary btn-block" type="submit" name="btnIniciar">Iniciar sesión</button>
                         </div>
+                        
+                        <%
+                            HttpSession sesion = request.getSession(false);
+                            if (sesion.getAttribute("rol") != null && sesion.getAttribute("rol") != "null") {
+                                if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
+                                    out.print("<div class=\"alert alert-danger\"><strong>Error!</strong>" + request.getAttribute("Error") + "<br></div>");
+                                } else {
+                                    response.sendRedirect("login");
+                                }//Findelif
+                            }
+                            else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
+                                    out.print("<div class=\"alert alert-danger\"><strong>Error!</strong>" + request.getAttribute("Error") + "<br></div>");
+                            }
+                        %>
                     </form>
                 </div>
             </div>

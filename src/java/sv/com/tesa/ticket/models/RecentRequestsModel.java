@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RecentRequestsBean;
-import static sv.com.tesa.ticket.models.ConexionModel.conexion;
 
 /**
  *
  * @author eduar
  */
-public class RecentRequestsModel extends ConexionModel
+public class RecentRequestsModel extends Conexion
 {
     public ArrayList<RecentRequestsBean> recientes()
     {

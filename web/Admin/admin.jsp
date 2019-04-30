@@ -8,7 +8,7 @@
 <%@page session="true" %>
 <%
     HttpSession sesion = request.getSession(false);
-    if(sesion.getAttribute("nombre") != null)
+    if(sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null")
     {
         sesion.getAttribute("nombre");
         if(!sesion.getAttribute("rol").toString().equals("Administrador"))

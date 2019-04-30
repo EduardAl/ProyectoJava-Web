@@ -9,14 +9,13 @@ import java.sql.SQLException;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.BinnaclesBean;
-import static sv.com.tesa.ticket.models.ConexionModel.conexion;
 import sv.com.tesa.ticket.utils.Utilidades;
 
 /**
  *
  * @author vaselinux
  */
-public class BinnaclesModel extends ConexionModel{
+public class BinnaclesModel extends Conexion{
     
     public JTable getBinnacles(String idCase)
     {

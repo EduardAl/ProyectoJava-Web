@@ -6,12 +6,12 @@
         <title>Lista de usuarios</title>
         <jsp:include page="/cabecera.jsp"/>
     </head>
-    <script language="JavaScript" type="text/JavaScript"> 
+    <script language = "JavaScript" type = "text/JavaScript" > 
         function abrirVentana() 
         { 
-         alert("${requestScope.error}");
+            alert("${requestScope.error}");
         } 
-</script> 
+    </script> 
     <body>
         <jsp:include page="/menu.jsp"/>
         <div class="container">
@@ -20,7 +20,7 @@
             </div>
             <div class="row">
                 <div class="col-md-10">
-                    
+
                     <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/usuarios?op=nuevo">Nuevo usuaro</a>
                     <br><br>
                     <table class="table table-striped table-bordered table-hover">
@@ -36,8 +36,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${requestScope.listarUsuarios}" var="usuario">
-                            <tr>
+                            <c:forEach items="${requestScope.listarUsuarios}" var="usuario">
+                                <tr>
                                     <td>${usuario.id}</td>
                                     <td>${usuario.fname}</td>
                                     <td>${usuario.lname}</td>
@@ -48,15 +48,15 @@
                                         <a class="btn btn-primary col-md-12" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><span class="glyphicon glyphicon-edit"></span> Editar</a>
                                         <a class="btn btn-danger col-md-12" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
                                     </td>
-                            </tr>
-                        </c:forEach>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </div>                    
         </div> 
-                <c:if test = "${requestScope.error != null}">
-                        <script>abrirVentana()</script>
-                    </c:if>
+        <c:if test = "${requestScope.error != null}">
+            <script>abrirVentana();</script>
+        </c:if>
     </body>
 </html>

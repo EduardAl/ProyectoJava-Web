@@ -18,14 +18,13 @@ import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.CaseBean;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.SingleCaseBean;
-import static sv.com.tesa.ticket.models.ConexionModel.conexion;
 import sv.com.tesa.ticket.utils.Utilidades;
 
 /**
  *
  * @author eduar
  */
-public class CasesModel extends ConexionModel{
+public class CasesModel extends Conexion{
 
     private JTable tabla;
  

@@ -13,7 +13,7 @@ import sv.com.tesa.ticket.beans.LoginBean;
  *
  * @author vaselinux
  */
-public class LoginModel extends ConexionModel
+public class LoginModel extends Conexion
 {
     public LoginBean validar(String user, String password)
     {
@@ -37,7 +37,7 @@ public class LoginModel extends ConexionModel
             }
             return usuario;
         } catch (SQLException ex) {
-            Logger.getLogger(ConexionModel.class).error("Error al obtener los datos",ex);
+            Logger.getLogger(Conexion.class).error("Error al obtener los datos",ex);
             usuario.setError("No se obtuvieron datos");
             return usuario;
         }
@@ -46,7 +46,7 @@ public class LoginModel extends ConexionModel
             try {
                 this.desconectar();
             } catch (SQLException ex) {
-                Logger.getLogger(ConexionModel.class).error("Error al cerrar la conexiòn.",ex);
+                Logger.getLogger(Conexion.class).error("Error al cerrar la conexiòn.",ex);
             }
         }
     }

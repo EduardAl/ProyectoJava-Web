@@ -10,7 +10,6 @@ import java.util.HashMap;
 import javax.swing.JTable;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
-import static sv.com.tesa.ticket.models.ConexionModel.conexion;
 import sv.com.tesa.ticket.utils.Utilidades;
 import sv.com.tesa.ticket.beans.SingleRequestBean;
 import org.apache.log4j.Logger;
@@ -18,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  * @author Edu
  */
-public class RequestModel extends LoginModel{
+public class RequestModel extends Conexion{
     
     private JTable tabla;
     

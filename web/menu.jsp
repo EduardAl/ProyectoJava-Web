@@ -14,10 +14,11 @@
                     Usuarios
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=nuevo">Registrar Usuarios</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=listar">Ver usuarios</a>    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=nuevo">
+                        <span class="oi oi-info"></span>  Registrar Usuarios</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=listar">
+                        <span class="oi oi-menu"></span>  Ver usuarios</a>    
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -25,14 +26,26 @@
                     Departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">Registrar Usuarios</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">Ver usuarios</a>    
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+            <ul class="nav navbar-nav navbar-right">
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" href="#">
+								<span class="oi oi-cog"></span> Editar</a>
+							</li>
+							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
+								<span class="oi oi-account-logout"></span> Cerrar Sesión</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
     </div>
 </nav>

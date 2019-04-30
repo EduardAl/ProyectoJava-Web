@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import sv.com.tesa.ticket.beans.EmployeeBean;
 import sv.com.tesa.ticket.beans.Usuarios;
 
@@ -24,20 +23,21 @@ public class UsersModel extends Conexion
     {
         ArrayList<Usuarios> lista = new ArrayList<>();
         try {
-            String sql = "SELECT  r.rname as 'rol', e.id, e.fname, e.lname, e.email, e.chief, d.dname as 'department' from roles r inner join employees e on r.id = e.rol inner join departments d on d.id = e.department order by e.id;";
+            String sql = "CALL sp_select_users()";
             this.conectar();
             st = conexion.prepareStatement(sql);
             rs = st.executeQuery();
             while(rs.next())
             {
                 Usuarios usuarios = new Usuarios();
-                usuarios.setId(rs.getInt("id"));
+                usuarios.setId(rs.getInt("ID"));
                 
-                usuarios.setFname(rs.getString("fname"));
-                usuarios.setLname(rs.getString("lname"));
-                usuarios.setEmail(rs.getString("email"));
-                usuarios.setRol(rs.getString("rol"));
-                usuarios.setDepartement(rs.getString("department"));
+                usuarios.setFname(rs.getString("Nombres"));
+                usuarios.setLname(rs.getString("Apellidos"));
+                usuarios.setEmail(rs.getString("Correo"));
+                usuarios.setRol(rs.getString("Rol"));
+                usuarios.setDepartement(rs.getString("Departamento"));
+                usuarios.setChief("Superior");
                 lista.add(usuarios);
             }
             return lista;
@@ -54,7 +54,7 @@ public class UsersModel extends Conexion
     public Usuarios obtenerUsuario(Integer id)
     {
         try {
-            String sql = "SELECT  r.rname as 'rol', e.id, e.fname, e.lname, e.email, e.chief, d.dname as 'department' from roles r inner join employees e on r.id = e.rol inner join departments d on d.id = e.department where e.id = ?;";
+            String sql = "CALL sp_select_user(?);";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setInt(1, id);
