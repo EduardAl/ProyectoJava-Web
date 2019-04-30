@@ -3,7 +3,6 @@
 
 # Log file
 *.log
-*.properties
 *.txt
 
 # BlueJ files
@@ -13,7 +12,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
