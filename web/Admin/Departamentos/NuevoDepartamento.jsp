@@ -30,17 +30,12 @@
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-info" value="Guardar" name="Guardar">
-                        <a class="btn btn-danger" href="#">Cancelar</a>
+                        <button type="submit" class="btn btn-info" value=" Guardar" name="Guardar"><span class="oi oi-circle-check"></span>  Guardar </button>
+                        <a class="btn btn-danger" href="#"><span class="oi oi-circle-x"></span>  Cancelar </a>
                     </form>
                 </div>
             </div>  
         </div>
-        <script>
-            $('#jefe').select2();            
-            $('#departamento').select2();
-
-            </script>
     </body>
 </html>
 
