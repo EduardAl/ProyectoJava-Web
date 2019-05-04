@@ -14,17 +14,16 @@
     </script> 
     <body>
         <jsp:include page="/menu.jsp"/>
-        <div class="container">
+        <div style="margin: 25px 100px" class="container-fluid col-11">
             <div class="row">
                 <h3>Lista de usuarios</h3>
             </div>
-            <div class="row">
-                <div class="col-md-10">
-
-                    <a type="button" class="btn btn-primary btn-md" href="${pageContext.request.contextPath}/usuarios?op=nuevo">Nuevo usuaro</a>
+            <div>
+                <div class="col-md-12">
+                    <a type="button" class="btn btn-primary" href="${pageContext.request.contextPath}/usuarios?op=nuevo"><span class="oi oi-plus"></span> Nuevo usuario</a>
                     <br><br>
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
+                    <table class="table table-striped table-bordered table-hover mt-4 ">
+                        <thead style="background-color:#3D3F46 ;color:white">
                             <tr>
                                 <th>Codigo de usuario</th>
                                 <th>Nombre</th>
@@ -32,7 +31,6 @@
                                 <th>Correo</th>
                                 <th>Rol</th>
                                 <th>Departamento</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -44,9 +42,11 @@
                                     <td>${usuario.email}</td>
                                     <td>${usuario.rol}</td>
                                     <td>${usuario.department}</td>
-                                    <td class="col-md-2">
-                                        <a class="btn btn-primary col-md-12" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><span class="glyphicon glyphicon-edit"></span> Editar</a>
-                                        <a class="btn btn-danger col-md-12" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                                    <td>
+                                        <div class="row">
+                                            <a style="margin-left: 15px" class="btn btn-primary col-md-5" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><span class="oi oi-document"></span> Editar</a>
+                                            <a style="margin-left: 10px" class="btn btn-danger col-md-5" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><span class="oi oi-trash"></span> Eliminar</a>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>
