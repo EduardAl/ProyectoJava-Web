@@ -31,6 +31,7 @@
                                 <th>Correo</th>
                                 <th>Rol</th>
                                 <th>Departamento</th>
+                                <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -38,7 +38,7 @@
                                         </c:choose>
                                     </c:forEach>
                                 </select>
-                                <span class="input-group-lg">            <span class="oi oi-aperture"></span></span>
+                                <span class="input-group-lg"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -99,8 +99,8 @@
                                 <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-info" value="Guardar" name="Guardar">
-                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/usuarios?op=listar">Cancelar</a>
+                        <button type="submit" class="btn btn-info" value="Guardar" name="Guardar"><span class="oi oi-circle-check"></span>  Guardar </button>
+                        <a class="btn btn-danger" href="${pageContext.request.contextPath}/usuarios?op=listar"><span class="oi oi-circle-x"></span>  Cancelar </a>
                     </form>
                 </div>
             </div>  

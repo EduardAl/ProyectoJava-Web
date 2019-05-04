@@ -7,15 +7,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">Inicio<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp"><span class="oi oi-home"></span> Inicio<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="oi oi-people"></span>
                     Usuarios
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=nuevo">
-                        <span class="oi oi-info"></span>  Registrar Usuarios</a>
+                        <span class="oi oi-person"></span>  Registrar Usuarios</a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=listar">
                         <span class="oi oi-menu"></span>  Ver usuarios</a>    
                     <div class="dropdown-divider"></div>
@@ -23,11 +24,13 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Departamentos
+                    <span class="oi oi-hard-drive"></span> Departamentos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">Registrar Usuarios</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">Ver usuarios</a>    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">
+                        <span class="oi oi-plus"></span> Nuevo departamento</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">
+                        <span class="oi oi-grid-two-up"></span> Ver departamentos</a>    
                     <div class="dropdown-divider"></div>
                 </div>
             </li>
