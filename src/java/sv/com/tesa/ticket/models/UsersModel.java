@@ -54,7 +54,7 @@ public class UsersModel extends Conexion
     public Usuarios obtenerUsuario(Integer id)
     {
         try {
-            String sql = "CALL sp_select_user(?);";
+            String sql = "CALL sp_select_individual_user(?);";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setInt(1, id);
@@ -64,10 +64,10 @@ public class UsersModel extends Conexion
             usuarios.setId(rs.getInt("id"));
             usuarios.setFname(rs.getString("fname"));
             usuarios.setLname(rs.getString("lname"));
-            usuarios.setEmail(rs.getString("email"));
-            usuarios.setRol(rs.getString("rol"));
-            usuarios.setChief(rs.getString("chief"));
-            usuarios.setDepartement(rs.getString("department"));
+            usuarios.setEmail(rs.getString("Correo"));
+            usuarios.setRol(rs.getString("Rol"));
+            usuarios.setChief(rs.getString("Superior"));
+            usuarios.setDepartement(rs.getString("Departamento"));
             return usuarios;
         } catch (SQLException ex) {
             Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);

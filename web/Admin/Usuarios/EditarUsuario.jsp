@@ -15,12 +15,12 @@
             <div class="row">
                 <div class=" col-md-7">
                     <form role="form" action="${pageContext.request.contextPath}/usuarios?op=modificar" method="POST">
-                        <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campos requeridos</strong></div>
+                        <div class="well well-sm"><strong><span class="oi oi-aperture"></span> Campos requeridos</strong></div>
                         <div class="form-group">
                             <label for="id">ID:</label>
                             <div class="input-group">
-                                <input type="hidden" class="form-control" name="id" id="id"  value="${usuario.id}">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <input type="number" readonly class="form-control" name="id" id="id" value="${usuario.id}">
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -38,28 +38,28 @@
                                         </c:choose>
                                     </c:forEach>
                                 </select>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <span class="input-group-lg">            <span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="nombre" id="nombre"  value="${usuario.fname}" required>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <input type="text" class="form-control" name="nombre" id="nombre"  value="${usuario.fname}" required> 
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="apellido">Apellido</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="apellido" id="apellido"  value="${usuario.lname}" required>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo:</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="correo" id="correo"  value="${usuario.email}" required>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -77,7 +77,7 @@
                                         </c:choose>
                                     </c:forEach>
                                 </select>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -96,7 +96,7 @@
                                         
                                     </c:forEach>
                                 </select>
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                <span class="input-group-addon"><span class="oi oi-aperture"></span></span>
                             </div>
                         </div>
                         <input type="submit" class="btn btn-info" value="Guardar" name="Guardar">
