@@ -14,7 +14,7 @@
     </script> 
     <body>
         <jsp:include page="/menu.jsp"/>
-        <div style="margin: 25px 100px" class="container-fluid col-11">
+        <div class="container col-11">
             <div class="row">
                 <h3>Lista de usuarios</h3>
             </div>
@@ -44,9 +44,9 @@
                                     <td>${usuario.rol}</td>
                                     <td>${usuario.department}</td>
                                     <td>
-                                        <div class="row">
-                                            <a style="margin-left: 15px" class="btn btn-primary col-md-5" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><span class="oi oi-document"></span> Editar</a>
-                                            <a style="margin-left: 10px" class="btn btn-danger col-md-5" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><span class="oi oi-trash"></span> Eliminar</a>
+                                        <div class="btn-group">
+                                            <a style="margin-left: 5px" class="btn btn-primary" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><span class="oi oi-document">&nbsp;Editar</span></a>
+                                            <a style="margin-left: 5px" class="btn btn-danger" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><span class="oi oi-trash">&nbsp;Eliminar</span></a>
                                         </div>
                                     </td>
                                 </tr>
