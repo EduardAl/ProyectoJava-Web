@@ -4,7 +4,7 @@ USE `ticketstesa`;
 --
 -- Host: localhost    Database: ticketstesa
 -- ------------------------------------------------------
--- Server version	8.0.13
+-- Server version	8.0.15
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -157,7 +157,7 @@ CREATE TABLE `employees` (
   KEY `department` (`department`),
   CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `roles` (`id`),
   CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`department`) REFERENCES `departments` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,7 +166,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,1,'Eduardo','Henríquez','eduard_alfons@hotmail.com','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',12,'DFF','2019-04-06 19:34:58','2019-05-04 15:47:28'),(2,1,'Eduardo','Arevalo','jefe','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',NULL,'DST','2019-04-06 19:34:58',NULL),(4,2,'José','Arévalo','Jefe1','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',NULL,'DST','2019-04-06 19:34:58',NULL),(5,3,'José','Arévalo','EmpleadoFuncional','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',NULL,'DST','2019-04-06 19:34:58',NULL),(6,4,'José','Arévalo','JefeDesarrollo','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',NULL,'DST','2019-04-06 19:34:58',NULL),(7,5,'José','Arévalo 2','EmpleadoDesarrollo','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',3,'DST','2019-04-06 19:34:58','2019-04-13 00:00:27'),(8,2,'Rodrigo Alejandro','Cerón Moreno','ceron@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DST','2019-04-06 20:33:08','2019-04-06 20:33:08'),(9,5,'edu','arevalo','arevalo@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',8,'DST','2019-04-06 20:37:01','2019-04-06 20:37:01'),(10,3,'Juan','Pérez','perez@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',8,'DST','2019-04-06 20:42:49','2019-04-06 20:42:49'),(11,2,'maza','riego','mazariego@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DVT','2019-04-06 20:46:14','2019-04-06 20:46:14'),(12,4,'Marvin','Martinez','vaselinux@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DVT','2019-04-06 20:49:21','2019-04-06 20:49:21'),(13,5,'Eduardo','Henríquez','eduard@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',12,'DVT','2019-04-06 20:51:16','2019-04-06 20:51:16'),(14,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:43:11','2019-04-12 20:43:11'),(15,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:01','2019-04-12 20:44:01'),(16,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:36','2019-04-12 20:44:36'),(17,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:39','2019-04-12 20:44:39'),(18,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:49:03','2019-04-12 20:49:03');
+INSERT INTO `employees` VALUES (1,1,'Eduardo','Henríquez','eduard_alfons@hotmail.com','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',12,'DFF','2019-04-06 19:34:58','2019-05-04 15:47:28'),(5,3,'José','Arévalo','EmpleadoFuncional','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',NULL,'DST','2019-04-06 19:34:58',NULL),(6,4,'José','Arévalo','JefeDesarrollo','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',NULL,'DST','2019-04-06 19:34:58',NULL),(7,5,'José','Arévalo 2','EmpleadoDesarrollo','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',3,'DST','2019-04-06 19:34:58','2019-04-13 00:00:27'),(8,2,'Rodrigo Alejandro','Cerón Moreno','ceron@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DST','2019-04-06 20:33:08','2019-04-06 20:33:08'),(9,5,'edu','arevalo','arevalo@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',8,'DST','2019-04-06 20:37:01','2019-04-06 20:37:01'),(10,3,'Juan','Pérez','perez@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',8,'DST','2019-04-06 20:42:49','2019-04-06 20:42:49'),(11,2,'maza','riego','mazariego@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DVT','2019-04-06 20:46:14','2019-04-06 20:46:14'),(12,4,'Marvin','Martinez','vaselinux@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',6,'DVT','2019-04-06 20:49:21','2019-04-06 20:49:21'),(13,5,'Eduardo','Henríquez','eduard@proyecto.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',12,'DVT','2019-04-06 20:51:16','2019-04-06 20:51:16'),(14,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:43:11','2019-04-12 20:43:11'),(15,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:01','2019-04-12 20:44:01'),(16,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:36','2019-04-12 20:44:36'),(17,1,'Eduardo','Rivera','ejemplo@email.com','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',3,'DFF','2019-04-12 20:44:39','2019-04-12 20:44:39'),(21,2,'José','Arévalo','e@gmail.com','0dfa400dc39e0723ba4c5b6336f8144fd7fd60373e0263bd563e4b699300aa85',NULL,'DST','2019-05-04 21:57:18',NULL);
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,6 +236,7 @@ CREATE TABLE `requests` (
   `commentary` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `file_dir` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `department` (`department`),
   KEY `request_type` (`request_type`),
@@ -245,7 +246,7 @@ CREATE TABLE `requests` (
   CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`request_type`) REFERENCES `request_types` (`id`),
   CONSTRAINT `requests_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `employees` (`id`),
   CONSTRAINT `requests_ibfk_4` FOREIGN KEY (`request_status`) REFERENCES `request_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -254,7 +255,6 @@ CREATE TABLE `requests` (
 
 LOCK TABLES `requests` WRITE;
 /*!40000 ALTER TABLE `requests` DISABLE KEYS */;
-INSERT INTO `requests` VALUES (1,1,'DST','Prueba	','Descripción',1,3,NULL,'2019-04-06 19:35:46',NULL),(2,1,'DVT','Prueba demostración	','Comentario demostración',11,3,NULL,'2019-04-06 20:46:54',NULL);
 /*!40000 ALTER TABLE `requests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -518,13 +518,13 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_request`(IN request_type int, IN department_in varchar(255), IN title varchar(255), IN descript text,
-									IN created_by int, in commentary text)
+									IN created_by int, in commentary text, in fileDir varchar(250))
 BEGIN
-insert into requests(request_type, department, title, descrip, created_by, request_status, commentary) 
+insert into requests(request_type, department, title, descrip, created_by, request_status, commentary,file_dir) 
 	values (request_type, (select departments.id from departments where departments.dname = department_in)
 			,title, descript, created_by
 			,(select request_status.id from request_status where request_status.rs_name like 'En espera de respuesta')
-			,commentary);
+			,commentary,fileDir);
                     
 END ;;
 DELIMITER ;
@@ -930,7 +930,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_select_request`(IN created_by_id int, IN department_in varchar(250))
 BEGIN
-select requests.id, requests.title, requests.descrip, departments.dname, request_types.rt_name, request_status.rs_name 
+select requests.id, requests.title, requests.descrip, departments.dname, request_types.rt_name, request_status.rs_name, requests.file_dir
 from requests inner join departments on requests.department = departments.id 
 inner join request_types on requests.request_type = request_types.id
 inner join request_status on requests.request_status = request_status.id
@@ -1154,7 +1154,7 @@ DELIMITER ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_update_cases`(in asignado int, in descrip text, in id varchar(8))
-update cases set cases.assigned_to = asignado, cases.descrip = descrip where cases.id = id; ;;
+update cases set cases.assigned_to = asignado, cases.descrip = descrip where cases.id = id ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1232,4 +1232,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-04 10:20:51
+-- Dump completed on 2019-05-13 16:57:50

@@ -35,6 +35,7 @@
                                 <th scope="col">Departamento solicitante</th>
                                 <th scope="col">Tipo de solicitud</th>
                                 <th scope="col">Estado de la solicitud</th>
+                                <th scope="col">Documento</th>
                                 <th scope="col">Operaciones</th>
                             </tr>
                         </thead>
@@ -48,8 +49,11 @@
                                     <td scope="col">${peticiones.tipoPeticion}</td>
                                     <td id="estadoPeticion" scope="col">${peticiones.estado}</td>
                                     <td scope="col">
-                                        <a class="btn btn-danger p-1 text-white"><span class="oi oi-trash"></span>Eliminar</a>
-                                        <a class="btn btn-info p-1 text-white"><span class="oi oi-file"></span>Modificar</a>
+                                        <a href="${pageContext.request.contextPath}/request?op=obtener&file=${peticiones.fileDir}" class="btn btn-link m-1"><span class="oi oi-file"></span>Descargar Documento</a>
+                                    </td>
+                                    <td scope="col">
+                                        <a class="btn btn-danger m-1 text-white"><span class="oi oi-trash"></span>Eliminar</a>
+                                        <a class="btn btn-info m-1 text-white"><span class="oi oi-file"></span>Modificar</a>
                                     </td>
                                 </tr>
                             </c:forEach>

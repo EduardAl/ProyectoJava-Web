@@ -5,19 +5,33 @@
  */
 package sv.com.tesa.ticket.controllers;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.io.*;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.RequestModel;
 import sv.com.tesa.ticket.beans.RequestBean;
-
 /**
  *
  * @author eduar
@@ -34,10 +48,10 @@ public class RequestController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
+
     static Logger log = Logger.getLogger(DepartmentController.class.getName());
     private RequestModel requestModel = new RequestModel();
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -53,20 +67,20 @@ public class RequestController extends HttpServlet {
                 request.setAttribute("Error", "Debe iniciar sesión.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-            
+
             String operacion = request.getParameter("op");
             switch (operacion) {
                 case "listar":
                     listar(request, response);
                     break;
                 case "nuevo":
-                    //nuevo(request, response);
+                    nuevo(request, response);
                     break;
                 case "insertar":
-                    //insertar(request, response);
+                    insertar(request, response);
                     break;
                 case "obtener":
-                    //obtener(request, response);
+                    obtener(request, response);
                     break;
                 case "modificar":
                     //modificar(request, response);
@@ -118,7 +132,7 @@ public class RequestController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private void listar(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
@@ -128,4 +142,105 @@ public class RequestController extends HttpServlet {
         }
     }
 
+    private void nuevo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listaTipoPeticiones", requestModel.listarTiposPeticion());
+            request.getRequestDispatcher("/Area/Funcional/Jefes/nuevaPeticion.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            log.error("Error: " + ex.getMessage());
+        }
+    }
+
+    private void insertar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
+            if (isMultipart) {
+                
+                RequestBean peticion = new RequestBean();
+                FileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                
+                //Obtiene el directorio de context.xml
+                ServletContext context = getServletContext();
+                String storeLocation = context.getInitParameter("FileLocation");
+                
+                List items = upload.parseRequest(request);
+                Iterator iterador = items.iterator();
+                while(iterador.hasNext())
+                {
+                    FileItem item = (FileItem)iterador.next();
+                    
+                    //Esto lee todo los input de tipo file
+                    if (!item.isFormField()) 
+                    {
+                        String fileName = item.getName();
+                        File path = new File(storeLocation);
+                        //Si no existe se crea el directorio
+                        if (!path.exists()) {
+                            path.mkdirs();
+                        }
+                        int randomNum = ThreadLocalRandom.current().nextInt(0, 9999);
+                        String dirFile = randomNum + fileName;
+                        String dirPc = storeLocation + File.separator + dirFile;
+                        peticion.setFileDir(dirFile);
+                        //Se crea el documento a guardar
+                        File uploadedFile  = new File(dirPc);
+                        //se guarda
+                        item.write(uploadedFile);
+                    }
+                    //Aqui se procesan los demas tipos de input del form
+                    else
+                    {
+                        if (item.getFieldName().equals("title")) 
+                        {
+                            peticion.setTitle(item.getString());
+                        }
+                        if (item.getFieldName().equals("request-type")) 
+                        {
+                            peticion.setRequestType(Integer.parseInt(item.getString()));
+                        }
+                        if (item.getFieldName().equals("description")) 
+                        {
+                            peticion.setDescription(item.getString());
+                        }
+                    }
+                }
+                peticion.setCreatedBy(LoginBean.getId());
+                peticion.setDepartment(LoginBean.getDepartamento());
+                requestModel.ingresarPeticion(peticion);
+                listar(request,response);
+            }
+        } catch (Exception ex) {
+            log.error("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private void obtener(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String fileName = request.getParameter("file"); 
+            ServletContext ctx = getServletContext();
+            String storeLocation = ctx.getInitParameter("FileLocation");
+            File file = new File(storeLocation + File.separator + fileName);
+            InputStream fis = new FileInputStream(file);
+            String mimeType = ctx.getMimeType(file.getAbsolutePath());
+            response.setContentType(mimeType != null? mimeType:"application/octet-stream");
+            response.setContentLength((int) file.length());
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+            ServletOutputStream os = response.getOutputStream();
+            byte[] bufferData = new byte[1024];
+            int read=0;
+            while((read = fis.read(bufferData))!= -1){
+                    os.write(bufferData, 0, read);
+            }
+            os.flush();
+            os.close();
+            fis.close();
+            System.out.println("File downloaded at client successfully");
+        } catch (IOException ex) {
+            log.error("Error: " + ex.getMessage());
+        }
+    }
 }

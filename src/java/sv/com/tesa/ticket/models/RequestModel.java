@@ -24,7 +24,7 @@ public class RequestModel extends Conexion{
     {
         try {
             
-            String sql = "call sp_insert_request(?,?,?,?,?,?)";
+            String sql = "call sp_insert_request(?,?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setInt(1, peticion.getRequestType());
@@ -33,6 +33,7 @@ public class RequestModel extends Conexion{
             st.setString(4, peticion.getDescription());
             st.setInt(5, peticion.getCreatedBy());
             st.setNull(6, Types.NULL);
+            st.setString(7, peticion.getFileDir());
             
             int resultado = st.executeUpdate();
             this.desconectar();
@@ -88,6 +89,7 @@ public class RequestModel extends Conexion{
                 obj.setDepartamento(rs.getString("dname"));
                 obj.setTipoPeticion(rs.getString("rt_name"));
                 obj.setEstado(rs.getString("rs_name"));
+                obj.setFileDir(rs.getString("file_dir"));
                 lista.add(obj);
             }
             return lista;
