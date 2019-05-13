@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -25,55 +26,61 @@ import sv.com.tesa.ticket.utils.Utilidades;
  * @author eduar
  */
 public class CasesModel extends Conexion{
-
-    private JTable tabla;
  
-    public JTable listarCasos(){
-        try{
-            String sql = "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
-                "concat(t.fname,' ',t.lname) AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
-                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
-                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
-                "INNER JOIN employees t ON c.tester = t.id \n" +
-                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
-                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
-                "where r.department = (select id from departments where dname = 'Departamento de Sistemas')\n" +
-                "UNION ALL\n" +
-                "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
-                "null AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
-                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
-                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
-                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
-                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
-                "where r.department = (select id from departments where dname =  '" + LoginBean.getDepartamento() + "') and tester is null";
-            this.conectar();
-            st = conexion.prepareStatement(sql);
-            boolean resultado = st.execute();
-            
-            if(resultado){
-                rs = st.getResultSet();
-                String[] col = {"IdCaso", "Caso", "Descripcion", "Porcentaje", "Tester", "Asignado", "Estado", "Fecha_Finalizacion"};
-                tabla = Utilidades.cargarTabla(col, rs);
-            }
-            else{
-                tabla = null;
-            }
-            return tabla;
-        }catch(SQLException ex){
-            Logger.getLogger(CasesModel.class).error("Error al listar "
-                    + "casos en CasesModel función listarCasos",ex);
-            return null;
-        }
-        finally    
-        {
-                    
-            try {
-                this.desconectar();
-            } catch (SQLException ex) {
-                Logger.getLogger(CasesModel.class.getName()).log(null, ex);
-            }
-        }
-    }
+//    public ArrayList<SingleCaseBean> listarCasos(){
+//        try{
+//            ArrayList <SingleCaseBean> lista = new ArrayList<>();
+//            String sql = "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
+//                "concat(t.fname,' ',t.lname) AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
+//                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
+//                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
+//                "INNER JOIN employees t ON c.tester = t.id \n" +
+//                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
+//                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
+//                "where r.department = (select id from departments where dname = 'Departamento de Sistemas')\n" +
+//                "UNION ALL\n" +
+//                "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
+//                "null AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
+//                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
+//                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
+//                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
+//                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
+//                "where r.department = (select id from departments where dname =  '" + LoginBean.getDepartamento() + "') and tester is null";
+//            this.conectar();
+//            st = conexion.prepareStatement(sql);
+//            rs = st.executeQuery();
+//            
+//            if(rs.next()){
+//                SingleCaseBean obj = new SingleCaseBean();
+//                obj.setId(rs.getString("IdCaso"));
+//                obj.setTitulo(rs.getString("Caso"));
+//                obj.setDescripcion(rs.getString("Descripcion"));
+//                obj.setAvance(rs.getDouble("porcentaje"));
+//                obj.setTester(rs.getString("Tester"));
+//                obj.setAsignadoA(rs.getString("Asignado"));
+//                obj.setEstado(rs.getString("Estado"));
+//                obj.setLimite(rs.getString("Finalizacion"));
+//                lista.add(obj);
+//            }
+//            else{
+//                lista = null;
+//            }
+//            return lista;
+//        }catch(SQLException ex){
+//            Logger.getLogger(CasesModel.class).error("Error al listar "
+//                    + "casos en CasesModel función listarCasos",ex);
+//            return null;
+//        }
+//        finally    
+//        {
+//                    
+//            try {
+//                this.desconectar();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+//            }
+//        }
+//    }
     
  @SuppressWarnings("empty-statement")
    public SingleCaseBean listarCaso(SingleCaseBean beanCase){
@@ -152,36 +159,36 @@ public class CasesModel extends Conexion{
        }
    }
    
-   public HashMap<Integer,String> listarEmpleadosACargo()
-    {
-        HashMap<Integer, String> map = new HashMap<>();
-        try {
-            String sql = "call sp_select_employees_chief(?)";
-            this.conectar();
-            st = conexion.prepareCall(sql);
-            st.setInt(1, LoginBean.getId());
-            rs = st.executeQuery();
-            
-            while(rs.next())
-            {
-                map.put(rs.getInt(1), rs.getString(2));
-            }
-            this.desconectar();
-            return map;
-        } catch (SQLException e) {
-            Logger.getLogger(CasesModel.class).error("Error al listar "
-                    + "empleados a cargo en CasesModel función listarEmpleadosACargo",e);
-             return null;
-        }
-        finally
-        {
-         try {
-             this.desconectar();
-         } catch (SQLException ex) {
-             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
-         }
-        }
-    }
+//   public HashMap<Integer,String> listarEmpleadosACargo()
+//    {
+//        HashMap<Integer, String> map = new HashMap<>();
+//        try {
+//            String sql = "call sp_select_employees_chief(?)";
+//            this.conectar();
+//            st = conexion.prepareCall(sql);
+//            st.setInt(1, LoginBean.getId());
+//            rs = st.executeQuery();
+//            
+//            while(rs.next())
+//            {
+//                map.put(rs.getInt(1), rs.getString(2));
+//            }
+//            this.desconectar();
+//            return map;
+//        } catch (SQLException e) {
+//            Logger.getLogger(CasesModel.class).error("Error al listar "
+//                    + "empleados a cargo en CasesModel función listarEmpleadosACargo",e);
+//             return null;
+//        }
+//        finally
+//        {
+//         try {
+//             this.desconectar();
+//         } catch (SQLException ex) {
+//             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+//         }
+//        }
+//    }
     
     public boolean ingresarCaso(CaseBean caso)
     {

@@ -10,5 +10,6 @@
 <script src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/assets/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/open-iconic-bootstrap.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 

@@ -13,4 +13,8 @@
             30
         </session-timeout>
     </session-config>
+    <context-param>
+        <param-name>FileLocation</param-name>
+        <param-value>C:\commons</param-value>
+    </context-param>
 </web-app>

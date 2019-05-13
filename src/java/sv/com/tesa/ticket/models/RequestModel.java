@@ -6,11 +6,12 @@
 package sv.com.tesa.ticket.models;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JTable;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
-import sv.com.tesa.ticket.utils.Utilidades;
+import java.util.logging.Level;
 import sv.com.tesa.ticket.beans.SingleRequestBean;
 import org.apache.log4j.Logger;
 /**
@@ -18,8 +19,6 @@ import org.apache.log4j.Logger;
  * @author Edu
  */
 public class RequestModel extends Conexion{
-    
-    private JTable tabla;
     
     public boolean ingresarPeticion(RequestBean peticion)
     {
@@ -69,7 +68,7 @@ public class RequestModel extends Conexion{
         }
     }
     
-    public JTable listarPeticiones(LoginBean usuario)
+    public ArrayList<SingleRequestBean> listarPeticiones()
     {
         try {
             String sql = "call sp_select_request(?,?)";
@@ -77,24 +76,33 @@ public class RequestModel extends Conexion{
             st = conexion.prepareCall(sql);
             st.setLong(1, LoginBean.getId());
             st.setString(2, LoginBean.getDepartamento());
+            rs = st.executeQuery();
             
-            if (st.execute()) 
+            ArrayList<SingleRequestBean> lista = new ArrayList<>();
+            while(rs.next())
             {
-                rs = st.getResultSet();
-                String[] col = {"id", "Titulo", "Descripcion", "Departamento", 
-                    "Tipo de peticion", "Estado de la peticion"}; 
-                tabla = Utilidades.cargarTabla(col, rs);
+                SingleRequestBean obj = new SingleRequestBean();
+                obj.setId(rs.getInt("id"));
+                obj.setTitulo(rs.getString("title"));
+                obj.setDescripcion(rs.getString("descrip"));
+                obj.setDepartamento(rs.getString("dname"));
+                obj.setTipoPeticion(rs.getString("rt_name"));
+                obj.setEstado(rs.getString("rs_name"));
+                lista.add(obj);
             }
-            else{
-                tabla = null;
-            }
-            this.desconectar();
-            return tabla;
+            return lista;
         } catch (SQLException e) 
         {
             Logger.getLogger(RequestModel.class).error("Error al listar peticiones en "
                     + "funcion listarPeticiones",e);
             return null;
+        }
+        finally{
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(AdminDeptModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
