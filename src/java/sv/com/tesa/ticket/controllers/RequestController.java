@@ -8,13 +8,12 @@ package sv.com.tesa.ticket.controllers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.io.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -32,6 +30,8 @@ import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.RequestModel;
 import sv.com.tesa.ticket.beans.RequestBean;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 /**
  *
  * @author eduar
@@ -49,6 +49,7 @@ public class RequestController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
 
+    private static final int DEFAULT_BUFFER_SIZE = 1024 * 1024 * 5;
     static Logger log = Logger.getLogger(DepartmentController.class.getName());
     private RequestModel requestModel = new RequestModel();
 
@@ -209,6 +210,8 @@ public class RequestController extends HttpServlet {
                 peticion.setCreatedBy(LoginBean.getId());
                 peticion.setDepartment(LoginBean.getDepartamento());
                 requestModel.ingresarPeticion(peticion);
+                //Dejar aca, no se que hace
+                response.reset();
                 listar(request,response);
             }
         } catch (Exception ex) {
@@ -219,28 +222,41 @@ public class RequestController extends HttpServlet {
 
     private void obtener(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String fileName = request.getParameter("file"); 
+            //Obtengo el nombre del archivo
+            String fileName = request.getParameter("file");
+            
+            //Esto hace que funcione, ni idea por que lo lei en stack overflow
+            response.reset();
+            
+            //Obtengo el nombre de la carpeta donde estan
             ServletContext ctx = getServletContext();
             String storeLocation = ctx.getInitParameter("FileLocation");
+            
+            //Obtengo el archivo de la carpeta
             File file = new File(storeLocation + File.separator + fileName);
-            InputStream fis = new FileInputStream(file);
-            String mimeType = ctx.getMimeType(file.getAbsolutePath());
-            response.setContentType(mimeType != null? mimeType:"application/octet-stream");
-            response.setContentLength((int) file.length());
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
-            ServletOutputStream os = response.getOutputStream();
-            byte[] bufferData = new byte[1024];
-            int read=0;
-            while((read = fis.read(bufferData))!= -1){
-                    os.write(bufferData, 0, read);
+            
+            //Set el tipo de contenido de la respuesta
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", ("attachment;filename=" + fileName));
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+            
+            FileInputStream fileIn = new FileInputStream(file);
+            OutputStream out = response.getOutputStream();
+            
+            byte[] outputByte = new byte[4096];
+            //copy binary contect to output stream
+            while(fileIn.read(outputByte, 0, 4096) != -1)
+            {
+                    out.write(outputByte, 0, 4096);
             }
-            os.flush();
-            os.close();
-            fis.close();
-            System.out.println("File downloaded at client successfully");
+            fileIn.close();
+            out.flush();
+            out.close();
+            
+            
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }
