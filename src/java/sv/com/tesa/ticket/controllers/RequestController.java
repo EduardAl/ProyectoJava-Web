@@ -10,13 +10,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +53,7 @@ public class RequestController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html; charset=Latin1");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
@@ -84,10 +82,10 @@ public class RequestController extends HttpServlet {
                     obtener(request, response);
                     break;
                 case "modificar":
-                    //modificar(request, response);
+                    verificarEstadoRequest(request, response);
                     break;
                 case "eliminar":
-                    //eliminar(request, response);
+                    verificarEstadoRequest(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -212,7 +210,8 @@ public class RequestController extends HttpServlet {
                 requestModel.ingresarPeticion(peticion);
                 //Dejar aca, no se que hace
                 response.reset();
-                listar(request,response);
+                request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
             }
         } catch (Exception ex) {
             log.error("Error: " + ex.getMessage());
@@ -225,7 +224,7 @@ public class RequestController extends HttpServlet {
             //Obtengo el nombre del archivo
             String fileName = request.getParameter("file");
             
-            //Esto hace que funcione, ni idea por que lo lei en stack overflow
+            //Esto hace que funcione, ni idea por que, lo lei en stack overflow
             response.reset();
             
             //Obtengo el nombre de la carpeta donde estan
@@ -257,6 +256,36 @@ public class RequestController extends HttpServlet {
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
             ex.printStackTrace();
+        }
+    }
+    
+    private void verificarEstadoRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            
+            RequestBean peticion = new RequestBean();
+            peticion.setId(Integer.parseInt(request.getParameter("id")));
+            String estado = requestModel.regresarEstado(peticion);
+            if (estado.equals("Solicitud rechazada")) 
+            {
+                String operacion = request.getParameter("op");
+                if (operacion.equals("eliminar")) {
+                    requestModel.eliminarPeticion(peticion);
+                    request.setAttribute("MensajeExito", "La peticion fue Eliminada");
+                    request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                    request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+                }
+                else
+                {
+                    
+                }
+            }
+            else{
+                request.setAttribute("ErrorEstado", "Solo se puede modificar una peticion rechazada");
+                request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            log.error("Error: " + ex.getMessage());
         }
     }
 }

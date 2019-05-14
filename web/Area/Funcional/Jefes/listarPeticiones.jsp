@@ -18,6 +18,24 @@
         <div>
             <jsp:include page="/Area/Funcional/Jefes/menu.jsp"/>
         </div>
+            <c:if test="${ErrorEstado != null}">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Error al modificar</h4>
+                    ${ErrorEstado}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </c:if>
+        <c:if test="${MensajeExito != null}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Borrado Exitoso</h4>
+                    ${ErrorEstado}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </c:if>
         <div class="container-fluid">
             <div class="m-2 row">
                 <div class="col text-center">
@@ -52,8 +70,8 @@
                                         <a href="${pageContext.request.contextPath}/request?op=obtener&file=${peticiones.fileDir}" class="btn btn-link m-1"><span class="oi oi-file"></span>Descargar Documento</a>
                                     </td>
                                     <td scope="col">
-                                        <a class="btn btn-danger m-1 text-white"><span class="oi oi-trash"></span>Eliminar</a>
-                                        <a class="btn btn-info m-1 text-white"><span class="oi oi-file"></span>Modificar</a>
+                                        <a class="btn btn-danger m-1 text-white" href="${pageContext.request.contextPath}/request?op=eliminar&id=${peticiones.id}"><span class="oi oi-trash"></span>Eliminar</a>
+                                        <a class="btn btn-info m-1 text-white" href="${pageContext.request.contextPath}/request?op=modificar&id=${peticiones.id}"><span class="oi oi-file"></span>Modificar</a>
                                     </td>
                                 </tr>
                             </c:forEach>

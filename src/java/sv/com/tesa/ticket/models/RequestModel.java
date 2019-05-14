@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.JTable;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
 import java.util.logging.Level;
@@ -210,4 +209,30 @@ public class RequestModel extends Conexion{
         }
     }
     
+    public String regresarEstado(RequestBean peticion)
+    {
+        try {
+            String sql = "select request_status.rs_name from request_status inner join "
+                    + "requests on requests.request_status = request_status.id "
+                    + "where requests.id = ?";
+            this.conectar();
+            st = conexion.prepareCall(sql);
+            st.setInt(1, peticion.getId());
+            
+            rs = st.executeQuery();
+            
+            String res = null;
+            while(rs.next())
+            {
+                res = rs.getString("rs_name");;
+            }
+            conexion.close();
+            return res;
+            
+        } catch (SQLException e) {
+            Logger.getLogger(RequestModel.class).error("Error al denegar peticion en "
+                    + "funcion denegarPeticion",e);
+            return null;
+        }
+    }
 }

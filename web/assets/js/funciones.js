@@ -14,4 +14,3 @@ function mostrarErrorExtencionDocumento(event) {
         document.getElementById("file").value = ""; 
     }
 }
-
