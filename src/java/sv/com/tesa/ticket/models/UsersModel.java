@@ -83,6 +83,38 @@ public class UsersModel extends Conexion
         }
     }
     
+    public Usuarios obtenerUsuarioConEmail(String email)
+    {
+        try {
+            String sql = "CALL sp_select_user_by_mail(?);";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, email);
+            rs = st.executeQuery();
+            Usuarios usuarios = new Usuarios();
+            rs.first();
+            usuarios.setId(rs.getInt("id"));
+            usuarios.setFname(rs.getString("fname"));
+            usuarios.setLname(rs.getString("lname"));
+            usuarios.setEmail(rs.getString("Correo"));
+            usuarios.setRol(rs.getString("Rol"));
+            usuarios.setChief(rs.getString("Superior"));
+            usuarios.setDepartement(rs.getString("Departamento"));
+            return usuarios;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        finally
+        {
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public boolean modificarJefe(EmployeeBean beanEmpleado, boolean op)
     {
          try {

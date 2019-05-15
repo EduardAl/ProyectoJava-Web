@@ -10,44 +10,77 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Inicio de sesión</title>
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <jsp:include page="/cabecera.jsp"/>
     </head>
-    <body>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-4">
-                    <h2>Inicio de sesión</h2>
+    <body class="my-login-page">
+        <section class="h-100">
+            <div class="container h-100">
+                <div class="row justify-content-md-center h-100">
+                    <div class="card-wrapper">
+                        <div class="brand align-self-xl-center" style="width: 150px; height: 150px; margin-bottom: 10px" >
+                            <img style="width: 170px; height: 170px; margin-left: -11px;" src="img/tesa.jpg" alt="logo">
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Login</h4>
+                                <form action="login" method="post" class="my-login-validation" novalidate="">
+                                    <div class="form-group">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input id="usuario" type="email" class="form-control" name="usuario" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Correo no válido
+                                        </div>
+                                    </div>
 
-                    <form action="login" method="post">
-                        <div class="form-group">
-                            <label for="usuario">Usuario</label>
-                            <input type="text" class="form-control" id="usuario" placeholder="Usuario" name="usuario" required>
+                                    <div class="form-group">
+                                        <label for="password">Password
+                                            <a href="forgot.jsp" class="float-right">
+                                                ¿Olvidó su contraseña?
+                                            </a>
+                                        </label>
+                                        <input id="password" type="password" class="form-control" name="password" required data-eye>
+                                        <div class="invalid-feedback">
+                                            La contraseña es requerida
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit" name="btnIniciar">Iniciar sesión</button>
+                                        <div class="invalid-feedback">
+                                            La contraseña es requerida
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        ¿No tienes una cuenta?, <a href="register.html">¡Regístrate!</a>
+                                    </div>
+                                    <br>
+                                    <div class="invalid-feedback d-block">
+                                    <%
+                                        HttpSession sesion = request.getSession(false);
+                                        if (sesion.getAttribute("rol") != null && sesion.getAttribute("rol") != "null") {
+                                            if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
+                                                out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
+                                            } else {
+                                                response.sendRedirect("login");
+                                            }//Findelif
+                                        } else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
+                                            out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
+                                        }
+                                    %>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="clave">Password</label>
-                            <input type="password" class="form-control" id="clave" placeholder="Password" name="clave" required>
+                        <div class="footer">
+                            Copyright &copy; 2019 &mdash; Telecomunicaciones Salvadoreñas 
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-lg btn-primary btn-block" type="submit" name="btnIniciar">Iniciar sesión</button>
-                        </div>
-                        
-                        <%
-                            HttpSession sesion = request.getSession(false);
-                            if (sesion.getAttribute("rol") != null && sesion.getAttribute("rol") != "null") {
-                                if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
-                                    out.print("<div class=\"alert alert-danger\"><strong>Error!</strong>" + request.getAttribute("Error") + "<br></div>");
-                                } else {
-                                    response.sendRedirect("login");
-                                }//Findelif
-                            }
-                            else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
-                                    out.print("<div class=\"alert alert-danger\"><strong>Error!</strong>" + request.getAttribute("Error") + "<br></div>");
-                            }
-                        %>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/my-login.js"></script>
     </body>
 </html>
