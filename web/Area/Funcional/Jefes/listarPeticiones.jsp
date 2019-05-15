@@ -51,6 +51,7 @@
                 </div>
             </div>
             <div class="m-3 container-fluid">
+                <%= application.getServerInfo() %>
                 <div class="table-responsive-xl">
                     <table class="table table-bordered">
                         <thead>
@@ -78,8 +79,10 @@
                                         <a href="${pageContext.request.contextPath}/request?op=obtener&file=${peticiones.fileDir}" class="btn btn-link m-1"><span class="oi oi-file"></span>Descargar Documento</a>
                                     </td>
                                     <td scope="col">
-                                        <a class="btn btn-danger m-1 text-white" href="${pageContext.request.contextPath}/request?op=eliminar&id=${peticiones.id}"><span class="oi oi-trash"></span>Eliminar</a>
-                                        <a class="btn btn-info m-1 text-white" href="${pageContext.request.contextPath}/request?op=modificar&id=${peticiones.id}"><span class="oi oi-file"></span>Modificar</a>
+                                        <div class="btn-group">
+                                            <a class="btn btn-danger m-1 text-white" href="${pageContext.request.contextPath}/request?op=eliminar&id=${peticiones.id}">Eliminar</a>
+                                            <a class="btn btn-info m-1 text-white" href="${pageContext.request.contextPath}/request?op=modificar&id=${peticiones.id}">Modificar</a>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:forEach>

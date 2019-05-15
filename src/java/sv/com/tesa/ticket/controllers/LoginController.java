@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
             String correo;
             String password;
             correo = request.getParameter("usuario");
-            password = request.getParameter("clave");
+            password = request.getParameter("password");
             LoginModel user = new LoginModel();
             LoginBean usuario = user.validar(correo, password);
             RequestDispatcher rd;
