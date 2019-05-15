@@ -7,18 +7,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp"><span class="oi oi-home"></span> Inicio<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/Area/Funcional/Jefes/inicio.jsp"><span class="oi oi-home"></span> Inicio<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="oi oi-people"></span>
-                    Casos
+                    Peticiones
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=nuevo">
-                        <span class="oi oi-person"></span>  Ver Casos</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=listar">
-                        <span class="oi oi-menu"></span>  Crear un nuevo caso</a>    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/request?op=listar">
+                        <span class="oi oi-person"></span>Ver Peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/request?op=nuevo">
+                        <span class="oi oi-menu"></span>Crear una nueva peticion</a>    
                     <div class="dropdown-divider"></div>
                 </div>
             </li>

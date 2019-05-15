@@ -6,11 +6,11 @@
 package sv.com.tesa.ticket.models;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.JTable;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
-import sv.com.tesa.ticket.utils.Utilidades;
+import java.util.logging.Level;
 import sv.com.tesa.ticket.beans.SingleRequestBean;
 import org.apache.log4j.Logger;
 /**
@@ -19,13 +19,11 @@ import org.apache.log4j.Logger;
  */
 public class RequestModel extends Conexion{
     
-    private JTable tabla;
-    
     public boolean ingresarPeticion(RequestBean peticion)
     {
         try {
             
-            String sql = "call sp_insert_request(?,?,?,?,?,?)";
+            String sql = "call sp_insert_request(?,?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setInt(1, peticion.getRequestType());
@@ -34,6 +32,7 @@ public class RequestModel extends Conexion{
             st.setString(4, peticion.getDescription());
             st.setInt(5, peticion.getCreatedBy());
             st.setNull(6, Types.NULL);
+            st.setString(7, peticion.getFileDir());
             
             int resultado = st.executeUpdate();
             this.desconectar();
@@ -69,7 +68,7 @@ public class RequestModel extends Conexion{
         }
     }
     
-    public JTable listarPeticiones(LoginBean usuario)
+    public ArrayList<SingleRequestBean> listarPeticiones()
     {
         try {
             String sql = "call sp_select_request(?,?)";
@@ -77,24 +76,34 @@ public class RequestModel extends Conexion{
             st = conexion.prepareCall(sql);
             st.setLong(1, LoginBean.getId());
             st.setString(2, LoginBean.getDepartamento());
+            rs = st.executeQuery();
             
-            if (st.execute()) 
+            ArrayList<SingleRequestBean> lista = new ArrayList<>();
+            while(rs.next())
             {
-                rs = st.getResultSet();
-                String[] col = {"id", "Titulo", "Descripcion", "Departamento", 
-                    "Tipo de peticion", "Estado de la peticion"}; 
-                tabla = Utilidades.cargarTabla(col, rs);
+                SingleRequestBean obj = new SingleRequestBean();
+                obj.setId(rs.getInt("id"));
+                obj.setTitulo(rs.getString("title"));
+                obj.setDescripcion(rs.getString("descrip"));
+                obj.setDepartamento(rs.getString("dname"));
+                obj.setTipoPeticion(rs.getString("rt_name"));
+                obj.setEstado(rs.getString("rs_name"));
+                obj.setFileDir(rs.getString("file_dir"));
+                lista.add(obj);
             }
-            else{
-                tabla = null;
-            }
-            this.desconectar();
-            return tabla;
+            return lista;
         } catch (SQLException e) 
         {
             Logger.getLogger(RequestModel.class).error("Error al listar peticiones en "
                     + "funcion listarPeticiones",e);
             return null;
+        }
+        finally{
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(AdminDeptModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -122,7 +131,8 @@ public class RequestModel extends Conexion{
                 peticionIndividual.setEstado(rs.getString("rs_name"));
                 peticionIndividual.setComentario(rs.getString("commentary"));
                 peticionIndividual.setFechaCreacion(rs.getString("created_at"));
-                peticionIndividual.setFechaModificacion(rs.getString("updated_at"));                
+                peticionIndividual.setFechaModificacion(rs.getString("updated_at"));   
+                peticionIndividual.setFileDir(rs.getString("file_dir"));
             }
             this.desconectar();
             return peticionIndividual;
@@ -136,7 +146,7 @@ public class RequestModel extends Conexion{
     public boolean modificarPeticion(RequestBean peticion)
     {
         try {
-            String sql = "call sp_modify_request (?,?,?,?,?)";
+            String sql = "call sp_modify_request (?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setInt(1, peticion.getId());
@@ -149,6 +159,13 @@ public class RequestModel extends Conexion{
             else
             {
                 st.setNull(5, Types.NULL);
+            }
+            if (peticion.getFileDir() != null) {
+                st.setString(6, peticion.getFileDir());
+            }
+            else
+            {
+                st.setNull(5,Types.NULL);
             }
             
             int resultado = st.executeUpdate();
@@ -200,4 +217,30 @@ public class RequestModel extends Conexion{
         }
     }
     
+    public String regresarEstado(RequestBean peticion)
+    {
+        try {
+            String sql = "select request_status.rs_name from request_status inner join "
+                    + "requests on requests.request_status = request_status.id "
+                    + "where requests.id = ?";
+            this.conectar();
+            st = conexion.prepareCall(sql);
+            st.setInt(1, peticion.getId());
+            
+            rs = st.executeQuery();
+            
+            String res = null;
+            while(rs.next())
+            {
+                res = rs.getString("rs_name");;
+            }
+            conexion.close();
+            return res;
+            
+        } catch (SQLException e) {
+            Logger.getLogger(RequestModel.class).error("Error al denegar peticion en "
+                    + "funcion denegarPeticion",e);
+            return null;
+        }
+    }
 }

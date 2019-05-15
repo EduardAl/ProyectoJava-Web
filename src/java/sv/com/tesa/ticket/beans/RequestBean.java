@@ -20,6 +20,7 @@ public class RequestBean {
     private String commentary;
     private int createdBy;
     private String requestStatus;
+    private String fileDir;
     
     public RequestBean()
     {
@@ -136,6 +137,16 @@ public class RequestBean {
      */
     public void setRequestStatus(String requestStatus) {
         this.requestStatus = requestStatus;
+    }
+    
+    public String getFileDir()
+    {
+        return this.fileDir;
+    }
+    
+    public void setFileDir(String fileDir)
+    {
+        this.fileDir = fileDir;
     }
     
     
