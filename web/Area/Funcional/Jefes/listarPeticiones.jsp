@@ -11,31 +11,39 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="/cabecera.jsp"/>
-        <script src="${pageContext.request.contextPath}/assets/js/funciones.js" type="text/javascript"></script>
         <title>Peticiones</title>
     </head>
     <body>
         <div>
             <jsp:include page="/Area/Funcional/Jefes/menu.jsp"/>
         </div>
-            <c:if test="${ErrorEstado != null}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <h4 class="alert-heading">Error al modificar</h4>
-                    ${ErrorEstado}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </c:if>
+        <c:if test="${ErrorModificar != null}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">Error al modificar</h4>
+                ${ErrorModificar}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </c:if>
         <c:if test="${MensajeExito != null}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <h4 class="alert-heading">Borrado Exitoso</h4>
-                    ${ErrorEstado}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            </c:if>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">Borrado Exitoso</h4>
+                ${MensajeExito}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </c:if>
+        <c:if test="${ErrorEliminar != null}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading">Error al Eliminar</h4>
+                ${ErrorEliminar}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </c:if>
         <div class="container-fluid">
             <div class="m-2 row">
                 <div class="col text-center">

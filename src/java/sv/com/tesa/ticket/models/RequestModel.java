@@ -131,7 +131,8 @@ public class RequestModel extends Conexion{
                 peticionIndividual.setEstado(rs.getString("rs_name"));
                 peticionIndividual.setComentario(rs.getString("commentary"));
                 peticionIndividual.setFechaCreacion(rs.getString("created_at"));
-                peticionIndividual.setFechaModificacion(rs.getString("updated_at"));                
+                peticionIndividual.setFechaModificacion(rs.getString("updated_at"));   
+                peticionIndividual.setFileDir(rs.getString("file_dir"));
             }
             this.desconectar();
             return peticionIndividual;
@@ -145,7 +146,7 @@ public class RequestModel extends Conexion{
     public boolean modificarPeticion(RequestBean peticion)
     {
         try {
-            String sql = "call sp_modify_request (?,?,?,?,?)";
+            String sql = "call sp_modify_request (?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setInt(1, peticion.getId());
@@ -158,6 +159,13 @@ public class RequestModel extends Conexion{
             else
             {
                 st.setNull(5, Types.NULL);
+            }
+            if (peticion.getFileDir() != null) {
+                st.setString(6, peticion.getFileDir());
+            }
+            else
+            {
+                st.setNull(5,Types.NULL);
             }
             
             int resultado = st.executeUpdate();

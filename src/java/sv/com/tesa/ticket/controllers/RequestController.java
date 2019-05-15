@@ -28,8 +28,6 @@ import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.RequestModel;
 import sv.com.tesa.ticket.beans.RequestBean;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 /**
  *
  * @author eduar
@@ -86,6 +84,9 @@ public class RequestController extends HttpServlet {
                     break;
                 case "eliminar":
                     verificarEstadoRequest(request, response);
+                    break;
+                case "modificarBase":
+                    modificarBase(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -261,7 +262,6 @@ public class RequestController extends HttpServlet {
     
     private void verificarEstadoRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
-            
             RequestBean peticion = new RequestBean();
             peticion.setId(Integer.parseInt(request.getParameter("id")));
             String estado = requestModel.regresarEstado(peticion);
@@ -274,18 +274,112 @@ public class RequestController extends HttpServlet {
                     request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
                     request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
                 }
-                else
+                if(operacion.equals("modificar"))
                 {
-                    
+                    peticion.setCreatedBy(LoginBean.getId());
+                    request.setAttribute("peticion", requestModel.listarPeticionIndividual(peticion));
+                    request.setAttribute("listaTipoPeticiones", requestModel.listarTiposPeticion());
+                    request.getRequestDispatcher("/Area/Funcional/Jefes/modificarPeticion.jsp").forward(request, response);
                 }
             }
             else{
-                request.setAttribute("ErrorEstado", "Solo se puede modificar una peticion rechazada");
-                request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
-                request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+                String op = request.getParameter("op");
+                if (op.equals("modificar"))
+                {
+                    request.setAttribute("ErrorModificar", "Solo se puede modificar una peticion rechazada");
+                    request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                    request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+                }
+                if (op.equals("eliminar")) {
+                    request.setAttribute("ErrorEliminar", "Solo se puede eliminar una peticion rechazada");
+                    request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                    request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+                }
             }
         } catch (Exception ex) {
             log.error("Error: " + ex.getMessage());
         }
     }
+    
+    private void modificarBase(HttpServletRequest request, HttpServletResponse response)
+    {
+        try {
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+
+            if (isMultipart){
+                RequestBean peticion = new RequestBean();
+                FileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                
+                //Obtiene el directorio de context.xml
+                ServletContext context = getServletContext();
+                String storeLocation = context.getInitParameter("FileLocation");
+                
+                List items = upload.parseRequest(request);
+                Iterator iterador = items.iterator();
+                while(iterador.hasNext())
+                {
+                    FileItem item = (FileItem)iterador.next();
+                    
+                    //Esto lee todo los input de tipo file
+                    if (!item.isFormField()) 
+                    {
+                        String fileName = item.getName();
+                        File path = new File(storeLocation);
+                        //Si no existe se crea el directorio
+                        if (!path.exists()) {
+                            path.mkdirs();
+                        }
+                        int randomNum = ThreadLocalRandom.current().nextInt(0, 9999);
+                        String dirFile = randomNum + fileName;
+                        String dirPc = storeLocation + File.separator + dirFile;
+                        peticion.setFileDir(dirFile);
+                        //Se crea el documento a guardar
+                        File uploadedFile  = new File(dirPc);
+                        //se guarda
+                        item.write(uploadedFile);
+                        System.out.println("Fin Escribir");
+                    }
+                    //Aqui se procesan los demas tipos de input del form
+                    else
+                    {
+                        if (item.getFieldName().equals("title")) 
+                        {
+                            peticion.setTitle(item.getString());
+                        }
+                        if (item.getFieldName().equals("request-type")) 
+                        {
+                            peticion.setRequestType(Integer.parseInt(item.getString()));
+                        }
+                        if (item.getFieldName().equals("description")) 
+                        {
+                            peticion.setDescription(item.getString());
+                        }
+                        if (item.getFieldName().equals("hidden-file")) 
+                        {
+                            eliminarArchivo(item.getString());
+                        }
+                        if (item.getFieldName().equals("id")) {
+                            peticion.setId(Integer.parseInt(item.getString()));
+                        }
+                    }
+                }
+                requestModel.modificarPeticion(peticion);
+                request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
+                request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
+            }
+        } catch (Exception ex) {
+            log.error("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    private boolean eliminarArchivo(String fileDir)
+    {
+        ServletContext ctx = getServletContext();
+        String storeLocation = ctx.getInitParameter("FileLocation");
+        File file = new File(storeLocation + File.separator + fileDir);
+        return file.delete();
+    }
+    
 }
