@@ -159,60 +159,62 @@ public class CasesModel extends Conexion{
        }
    }
    
-//   public HashMap<Integer,String> listarEmpleadosACargo()
-//    {
-//        HashMap<Integer, String> map = new HashMap<>();
-//        try {
-//            String sql = "call sp_select_employees_chief(?)";
-//            this.conectar();
-//            st = conexion.prepareCall(sql);
-//            st.setInt(1, LoginBean.getId());
-//            rs = st.executeQuery();
-//            
-//            while(rs.next())
-//            {
-//                map.put(rs.getInt(1), rs.getString(2));
-//            }
-//            this.desconectar();
-//            return map;
-//        } catch (SQLException e) {
-//            Logger.getLogger(CasesModel.class).error("Error al listar "
-//                    + "empleados a cargo en CasesModel función listarEmpleadosACargo",e);
-//             return null;
-//        }
-//        finally
-//        {
-//         try {
-//             this.desconectar();
-//         } catch (SQLException ex) {
-//             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
-//         }
-//        }
-//    }
+   public HashMap<Integer,String> listarEmpleadosACargo()
+    {
+        HashMap<Integer, String> map = new HashMap<>();
+        try {
+            String sql = "call sp_select_employees_chief(?)";
+            this.conectar();
+            st = conexion.prepareCall(sql);
+            st.setInt(1, LoginBean.getId());
+            rs = st.executeQuery();
+            
+            while(rs.next())
+            {
+                map.put(rs.getInt(1), rs.getString(2));
+            }
+            this.desconectar();
+            return map;
+        } catch (SQLException e) {
+            Logger.getLogger(CasesModel.class).error("Error al listar "
+                    + "empleados a cargo en CasesModel función listarEmpleadosACargo",e);
+             return null;
+        }
+        finally
+        {
+         try {
+             this.desconectar();
+         } catch (SQLException ex) {
+             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+         }
+        }
+    }
     
     public boolean ingresarCaso(CaseBean caso)
     {
         try {
-            String sql = "call sp_insert_new_case(?,?,?,?,?,?)";
+            String sql = "call sp_insert_new_case(?,?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setString(1, caso.getDepartamento());
             st.setString(2, caso.getId());
             st.setInt(3, caso.getIdSolicitud());
             st.setInt(4, caso.getEmpleadoAsignado());
-            DateFormat formato = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+            DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedDate = formato.parse(caso.getFechaLimite());
             Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
             st.setTimestamp(5, timestamp);
             st.setString(6, caso.getDescripcion());
+            st.setString(7, caso.getFileDir());
             
             int resultado = st.executeUpdate();
             this.desconectar();
             return resultado > 0;
             
         } catch (SQLException | ParseException e) {
-            Logger.getLogger(CasesModel.class).error("Error al ingresar "
-                    + "un caso en CasesModel función IngresarCaso",e);
+           // Logger.getLogger(CasesModel.class).error("Error al ingresar "
+            //        + "un caso en CasesModel función IngresarCaso",e);
+            e.printStackTrace();
             return false;
         }
         finally{
@@ -220,7 +222,8 @@ public class CasesModel extends Conexion{
          try {
              this.desconectar();
          } catch (SQLException ex) {
-             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+             //Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+             ex.printStackTrace();
          }
         }
     }
