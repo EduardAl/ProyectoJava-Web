@@ -12,6 +12,7 @@
     <script src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/assets/js/my-login.min.js" type="text/javascript"></script>
     <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${pageContext.request.contextPath}/assets/css/simple-sidebar.css" rel="stylesheet" type="text/css"/>
     <link href="${pageContext.request.contextPath}/assets/css/select2.min.css" rel="stylesheet" type="text/css"/>
     <link href="${pageContext.request.contextPath}/assets/css/alertify.core.css" rel="stylesheet" type="text/css"/>
     <link href="${pageContext.request.contextPath}/assets/css/alertify.default.css" rel="stylesheet" type="text/css"/>

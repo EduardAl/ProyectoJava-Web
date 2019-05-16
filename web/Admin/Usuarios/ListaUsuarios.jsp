@@ -3,15 +3,6 @@
 <!DOCTYPE html>
 <html>
     <jsp:include page="/cabecera.jsp"/>
-    <script language = "JavaScript" type = "text/JavaScript" > 
-        function abrirVentana() 
-        { 
-        alert("${requestScope.error}");
-        } 
-        $('#myModal').on('shown.bs.modal', function () {
-            $('#myInput').trigger('focus')
-        })
-    </script> 
     <body onload="">
         <jsp:include page="/menu.jsp"/>
         <div class="container col-11">
@@ -61,8 +52,17 @@
                 </div>
             </div>                    
         </div> 
-        <c:if test = "${requestScope.error != null}">
-            <script>abrirVentana();</script>
-        </c:if>
+        <script>
+            <c:if test="${not empty exito}">
+            alertify.success('${exito}');
+                <c:set var="exito" value="" scope="session" />
+            </c:if>
+            <c:if test="${not empty fracaso}">
+            alertify.error('${fracaso}');
+                <c:set var="fracaso" value="" scope="session" />
+            </c:if>
+        </script>
+
+        <script src="/assets/js/alertify.js" type="text/javascript"></script>
     </body>
 </html>

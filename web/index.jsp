@@ -3,6 +3,7 @@
     Created on : 03-22-2019, 08:58:49 AM
     Author     : eduar
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page session="true" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -66,6 +67,8 @@
                                             }//Findelif
                                         } else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
                                             out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
+                                        } else if (request.getAttribute("Success") != null && sesion.getAttribute("Success") != "null") {
+                                            out.print("<div class=\"alert alert-success\">" + request.getAttribute("Success") + "<br></div>");
                                         }
                                     %>
                                     </div>
@@ -79,7 +82,16 @@
                 </div>
             </div>
         </section>
-
+        <script>
+            <c:if test="${not empty exito}">
+            alertify.success('${exito}');
+                <c:set var="exito" value="" scope="session" />
+            </c:if>
+            <c:if test="${not empty fracaso}">
+            alertify.error('${fracaso}');
+                <c:set var="fracaso" value="" scope="session" />
+            </c:if>
+        </script>
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/my-login.js"></script>
     </body>

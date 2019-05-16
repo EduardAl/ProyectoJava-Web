@@ -23,10 +23,13 @@ Author     : eduar
                         <div class="card fat">
                             <div class="card-body">
                                 <h4 class="card-title">Recuperación de cuenta</h4>
-                                <form method="POST" action="ResetPassword">
+                                <form action="ResetPassword?op=email" method="post" class="my-login-validation" novalidate="">
                                     <div class="form-group">
                                         <label for="email">Correo electrónico</label>
                                         <input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Dirección de correo requerido.
+                                        </div>
                                         <div class="invalid-feedback d-block">
                                             <%
                                                 if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
@@ -57,7 +60,7 @@ Author     : eduar
             </div>
         </section>
 
-        <script src="js/jquery.min.js"></script>
-        <script src="js/my-login.js"></script>
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/my-login.js"></script>
     </body>
 </html>

@@ -88,4 +88,11 @@ private static int entero;
             return false;
         }
     }
+    public static String clavesIguales(String clave1, String clave2)
+    {
+        if(!clave1.equals(clave2))
+            return "Las claves no coinciden";
+        else
+            return "Las claves coinciden";
+    }
 }
