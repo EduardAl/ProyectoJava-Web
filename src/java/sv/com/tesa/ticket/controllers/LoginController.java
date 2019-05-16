@@ -43,6 +43,7 @@ public class LoginController extends HttpServlet {
             LoginBean usuario = user.validar(correo, password);
             RequestDispatcher rd;
             HttpSession sesion = request.getSession(false);
+            System.out.println(sesion.getAttribute("rol"));
             try {
                 if (sesion.getAttribute("rol") != null) {
                     if (sesion.getAttribute("rol").equals("Administrador")) {
@@ -54,7 +55,7 @@ public class LoginController extends HttpServlet {
                     } else if (sesion.getAttribute("rol").equals("Empleado de área funcional")) {
                         rd = request.getRequestDispatcher("Area/Funcional/Empleado/inicio.jsp");
                         rd.forward(request, response);
-                    } else if (sesion.getAttribute("rol").equals("efe de desarrollo")) {
+                    } else if (sesion.getAttribute("rol").equals("Jefe de desarrollo")) {
                         rd = request.getRequestDispatcher("Area/Desarrollo/Jefes/inicio.jsp");
                         rd.forward(request, response);
                     } else if (sesion.getAttribute("rol").equals("Programador")) {
@@ -80,7 +81,7 @@ public class LoginController extends HttpServlet {
                         } else if (sesion.getAttribute("rol").equals("Empleado de área funcional")) {
                             rd = request.getRequestDispatcher("Area/Funcional/Empleado/inicio.jsp");
                             rd.forward(request, response);
-                        } else if (sesion.getAttribute("rol").equals("efe de desarrollo")) {
+                        } else if (sesion.getAttribute("rol").equals("Jefe de desarrollo")) {
                             rd = request.getRequestDispatcher("Area/Desarrollo/Jefes/inicio.jsp");
                             rd.forward(request, response);
                         } else if (sesion.getAttribute("rol").equals("Programador")) {

@@ -51,7 +51,6 @@
                 </div>
             </div>
             <div class="m-3 container-fluid">
-                <%= application.getServerInfo() %>
                 <div class="table-responsive-xl">
                     <table class="table table-bordered">
                         <thead>

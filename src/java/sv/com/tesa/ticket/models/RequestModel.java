@@ -232,7 +232,7 @@ public class RequestModel extends Conexion{
             String res = null;
             while(rs.next())
             {
-                res = rs.getString("rs_name");;
+                res = rs.getString("rs_name");
             }
             conexion.close();
             return res;
@@ -243,4 +243,30 @@ public class RequestModel extends Conexion{
             return null;
         }
     }
+    
+    public String regresarFileDir(RequestBean peticion)
+    {
+        try {
+            String sql = "select requests.file_dir from requests where requests.id = ?";
+            this.conectar();
+            st = conexion.prepareCall(sql);
+            st.setInt(1, peticion.getId());
+            
+            rs = st.executeQuery();
+            
+            String res = null;
+            while(rs.next())
+            {
+                res = rs.getString("file_dir");
+            }
+            conexion.close();
+            return res;
+            
+        } catch (SQLException e) {
+            Logger.getLogger(RequestModel.class).error("Error al denegar peticion en "
+                    + "funcion denegarPeticion",e);
+            return null;
+        }
+    }
+    
 }
