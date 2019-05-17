@@ -285,4 +285,40 @@ public class UsersModel extends Conexion
             return null;
         }
     }
+    public ArrayList<Usuarios> listarUsuariosDepartamento(String departamento)
+    {
+        ArrayList<Usuarios> lista = new ArrayList<>();
+        try {
+            String sql = "CALL sp_select_users_departamento(?)";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, departamento);
+            rs = st.executeQuery();
+            while(rs.next())
+            {
+                Usuarios usuarios = new Usuarios();
+                usuarios.setId(rs.getInt("ID"));
+                
+                usuarios.setFname(rs.getString("Nombres"));
+                usuarios.setLname(rs.getString("Apellidos"));
+                usuarios.setEmail(rs.getString("Correo"));
+                usuarios.setRol(rs.getString("Rol"));
+                usuarios.setDepartement(rs.getString("Departamento"));
+                usuarios.setChief("Superior");
+                lista.add(usuarios);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        finally
+        {
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }

@@ -154,14 +154,14 @@
                                                         <ul class="list-group">
                                                             <li class="list-group-item"><b>Petición #</b><span id="codigo"></span></li>
                                                             <li class="list-group-item"><b>Título: </b><span id="nombre"></span></li>
-                                                            <li class="list-group-item"><b>Tipo:</b>$<span id="tipo"></span></li>
-                                                            <li class="list-group-item"><b>Departamento:</b><span id="departamento"></span></li>
+                                                            <li class="list-group-item"><b>Tipo: </b><span id="tipo"></span></li>
+                                                            <li class="list-group-item"><b>Departamento: </b><span id="departamento"></span></li>
                                                             <li class="list-group-item"><b>Descripción: </b><span id="descripcion"></span></li>
-                                                            <li class="list-group-item"><b>Creado por:</b><span id="creado"></span></li>
-                                                            <li class="list-group-item"><b>Estado:</b><span id="estado"></span></li>
-                                                            <li class="list-group-item"><b>Comentario:</b><span id="comentario"></span></li>
-                                                            <li class="list-group-item"><b>Fecha de creación:</b><span id="fechac"></span></li>
-                                                            <li class="list-group-item"><b>Última modificación:</b><span id="fechaa"></span></li>
+                                                            <li class="list-group-item"><b>Creado por: </b><span id="creado"></span></li>
+                                                            <li class="list-group-item"><b>Estado: </b><span id="estado"></span></li>
+                                                            <li class="list-group-item"><b>Comentario: </b><span id="comentario"></span></li>
+                                                            <li class="list-group-item"><b>Fecha de creación: </b><span id="fechac"></span></li>
+                                                            <li class="list-group-item"><b>Última modificación: </b><span id="fechaa"></span></li>
                                                         </ul>
                                                     </div>
                                                     <div class="modal-footer">
@@ -172,22 +172,17 @@
                                             </div>
                                         </div>
                                         <div class="btn-group">
-                                            <a  title="detalles" class="btn btn-default" href="javascript:detalles(${peticiones.id})"><span class="oi oi-zoom-in text-white"></span></a>
+                                            <a  title="detalles" class="btn btn-info m-1" href="javascript:detalles(${peticiones.id})"><span class="oi oi-zoom-in text-white"></span></a>
                                                 <c:choose>
                                                     <c:when test="${peticiones.estado == 'En espera de respuesta'}">
-                                                    <button class="btn btn-danger m-1" data-toggle="modal" data-target="#modal${peticiones.id}">
-                                                        Denegar
-                                                    </button>
-                                                    <button class="btn btn-success m-1" data-toggle="modal" data-target="#modal-acept${peticiones.id}">
-                                                        Aceptar
-                                                    </button>
+                                                    <a title="denegar" class="btn btn-danger m-1" href="#" data-toggle="modal" data-target="#modal${peticiones.id}"><span class="oi oi-circle-x text-white"></span>
+                                                    </a>
+                                                    <a title="aceptar" class="btn btn-success m-1" href="#" data-toggle="modal" data-target="#modal-acept${peticiones.id}"><span class="oi oi-circle-check text-white"></span>
+                                                    </a>
                                                 </c:when>
-                                                <c:otherwise>
-                                                    <button class="btn btn-danger m-1" data-toggle="modal" data-target="#modal${peticiones.id}" disabled>
-                                                        Denegar
-                                                    </button>
-                                                    <button class="btn btn-success m-1" data-toggle="modal" data-target="#modal-acept${peticiones.id}" disabled>
-                                                        Aceptar
+                                                    <c:otherwise>
+                                                    <button title="denegar" class="btn btn-danger m-1" data-toggle="modal" data-target="#modal${peticiones.id}" disabled><span class="oi oi-zoom-in text-white" disabled></span></button>
+                                                    <button title="aceptar" class="btn btn-success m-1"  data-toggle="modal" data-target="#modal-acept${peticiones.id}" disabled><span class="oi oi-circle-check text-white disabled"></span>
                                                     </button>
                                                 </c:otherwise>
                                             </c:choose>
@@ -223,9 +218,11 @@
                         $('#tipo').text(data.tipo);
                         $('#departamento').text(data.departamento);
                         $('#descripcion').text(data.descripcion);
-                        $('#creado').text(data.creado);
+                        $('#creado').text(data.creado);                        
+                        $('#comentario').text(data.comentario);
                         $('#estado').text(data.estado);
                         $('#fechac').text(data.fechac);
+                        $('#fechaa').text(data.fechaa);
                         $('#modal').modal('show');
                     },
                     error: function (data) {

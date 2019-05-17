@@ -288,4 +288,26 @@ public class CasesModel extends Conexion{
      }
      return false;
     }
+    
+   public boolean addTester(String idCase, Integer idEmp)
+   {
+       try{
+           String sql = "call sp_update_case_tester(?,?)";
+           this.conectar();
+           st = conexion.prepareCall(sql);
+           st.setString(1, idCase);
+           st.setInt(2, idEmp);
+           int resultado = st.executeUpdate();            
+            if (resultado > 0) {
+                this.desconectar();
+                return true;
+            }
+            this.desconectar();
+            return false;
+       }catch(Exception ex){
+           Logger.getLogger(AdminDeptModel.class).error("Error al actualizar "
+                    + "casos en función modificarCasoJefeDesarrollo",ex);
+            return false;
+       }
+   }
 }

@@ -354,7 +354,6 @@ HttpSession sesion = request.getSession(false);
             }
         } catch (Exception ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 
@@ -378,9 +377,11 @@ HttpSession sesion = request.getSession(false);
                 member.put("tipo", requestBean.getTipoPeticion());
                 member.put("departamento", requestBean.getDepartamento());
                 member.put("descripcion", requestBean.getDescripcion());
+                member.put("comentario", requestBean.getComentario());
                 member.put("creado", requestBean.getCreadoPor());
                 member.put("estado", requestBean.getEstado());
                 member.put("fechac", requestBean.getFechaCreacion());
+                member.put("fechaa", requestBean.getFechaModificacion());
                 String json = member.toString();
                 out.write(json);
                 System.out.println("JSON " + json);

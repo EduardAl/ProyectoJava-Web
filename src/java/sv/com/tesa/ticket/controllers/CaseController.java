@@ -24,12 +24,14 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.CaseBean;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
 import static sv.com.tesa.ticket.controllers.RequestController.log;
 import sv.com.tesa.ticket.models.CasesModel;
 import sv.com.tesa.ticket.models.RequestModel;
+import sv.com.tesa.ticket.models.UsersModel;
 
 /**
  *
@@ -50,6 +52,7 @@ public class CaseController extends HttpServlet {
     
     private RequestModel requestModel = new RequestModel();
     private CasesModel caseModel = new CasesModel();
+    static Logger log = Logger.getLogger(CaseController.class.getName());
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -88,6 +91,9 @@ public class CaseController extends HttpServlet {
                     break;
                 case "obtener":
                     obtenerDocPeticion(request, response);
+                    break;
+                case "tester":
+                    asignarTester(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -141,7 +147,7 @@ public class CaseController extends HttpServlet {
             request.setAttribute("listarEmpleados", caseModel.listarEmpleadosACargo());
             request.getRequestDispatcher("/Area/Desarrollo/Jefes/listarPeticiones.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            //log.error("Error: " + ex.getMessage());
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -155,6 +161,7 @@ public class CaseController extends HttpServlet {
             request.setAttribute("ExitoDenegar", "La peticion fue denegada");
             listarRequest(request,response);
         } catch (Exception e) {
+            log.error("Error: " + e.getMessage());
         }
     }
     
@@ -227,8 +234,7 @@ public class CaseController extends HttpServlet {
                 listarRequest(request,response);
             }
         } catch (Exception ex) {
-            //log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -268,18 +274,19 @@ public class CaseController extends HttpServlet {
             
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
     
     private void listarCasos(HttpServletRequest request, HttpServletResponse response)
     {
         try {
+            UsersModel usersModel = new UsersModel();
+            HttpSession sesion = request.getSession(false);
+            request.setAttribute("listarEmpleados", usersModel.listarUsuariosDepartamento((String) sesion.getAttribute("departamento")));
             request.setAttribute("listaCasos", caseModel.listarCasos());
             request.getRequestDispatcher("/Area/Desarrollo/Jefes/listaCasos.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            //log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -319,7 +326,21 @@ public class CaseController extends HttpServlet {
             
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
+        }
+    }
+
+    private void asignarTester(HttpServletRequest request, HttpServletResponse response) {
+        String idCaso = request.getParameter("idc");
+        Integer idTester = Integer.parseInt(request.getParameter("empleados"));
+        if(caseModel.addTester(idCaso, idTester))
+        {
+            request.setAttribute("exito", "Tester cambiado con éxito");
+            listarCasos(request, response);
+        }
+        else
+        {
+            request.setAttribute("fracaso", "Ocurrió un error al cambiar tester.");
+            listarCasos(request, response);
         }
     }
 }

@@ -66,7 +66,13 @@ public class AdminBossModel extends Conexion{
             st.setString(6, beanEmpleado.getPassword());
             st.setString(7, beanEmpleado.getDepartamento());
             st.setBoolean(8, op);
-            st.setInt(9, beanEmpleado.getJefe());
+            if (beanEmpleado.getJefe() != 0) {
+                st.setInt(9, beanEmpleado.getJefe());
+            }
+            else
+            {
+                st.setNull(9, Types.NULL);
+            }
             
             int resultado = st.executeUpdate();
             this.desconectar();

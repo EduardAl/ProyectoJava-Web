@@ -188,7 +188,12 @@ public class UserController extends HttpServlet {
             employeeBean.setApellido(request.getParameter("apellido"));
             employeeBean.setDepartamento(request.getParameter("departamento"));
             employeeBean.setEmail(request.getParameter("correo"));
-            employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            if (request.getParameter("jefe") != null && !request.getParameter("jefe").equals("")) {
+                employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            }
+            else{
+                employeeBean.setJefe(0);
+            }
             employeeBean.setNombre(request.getParameter("nombre"));
             employeeBean.setRol(Integer.parseInt(request.getParameter("rol")));
             employeeBean.setId(Integer.parseInt(request.getParameter("id")));
