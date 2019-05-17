@@ -65,11 +65,13 @@ public class CaseController extends HttpServlet {
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
                 sesion.getAttribute("nombre");
                 if (!sesion.getAttribute("rol").toString().equals("Jefe de desarrollo")) {
+                    log.error("Error de tipo de usuario.");
                     request.setAttribute("Error", "Error de usuario.");
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
             } else {
                 request.setAttribute("Error", "Debe iniciar sesión.");
+                log.error("Debe iniciar sesión.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
             String operacion = request.getParameter("op");

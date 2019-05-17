@@ -53,7 +53,7 @@ public class UserController extends HttpServlet {
                 try {
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 } catch (ServletException ex) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error(ex.getMessage());
                 }
             }
             String operacion = request.getParameter("op");
@@ -83,7 +83,7 @@ public class UserController extends HttpServlet {
                     throw new AssertionError();
             }
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -128,7 +128,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("listarUsuarios", modelo.listarUsuarios());
             request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            log.error("Error: " + ex.getMessage());
+            log.error(ex.getMessage());
         }
     }
 
@@ -139,7 +139,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("listarEmpleados", adminBossModel.listarEmpleados());
             request.getRequestDispatcher("/Admin/Usuarios/NuevoUsuario.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -151,8 +151,7 @@ public class UserController extends HttpServlet {
             employeeBean.setEmail(request.getParameter("correo"));
             if (request.getParameter("jefe") != null && !request.getParameter("jefe").equals("")) {
                 employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
-            }
-            else{
+            } else {
                 employeeBean.setJefe(0);
             }
             employeeBean.setNombre(request.getParameter("nombre"));
@@ -164,7 +163,7 @@ public class UserController extends HttpServlet {
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -178,7 +177,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("listarEmpleados", adminBossModel.listarEmpleados());
             request.getRequestDispatcher("/Admin/Usuarios/EditarUsuario.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -190,8 +189,7 @@ public class UserController extends HttpServlet {
             employeeBean.setEmail(request.getParameter("correo"));
             if (request.getParameter("jefe") != null && !request.getParameter("jefe").equals("")) {
                 employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
-            }
-            else{
+            } else {
                 employeeBean.setJefe(0);
             }
             employeeBean.setNombre(request.getParameter("nombre"));
@@ -203,19 +201,19 @@ public class UserController extends HttpServlet {
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
         if (modelo.eliminarEmpleado(Integer.parseInt(request.getParameter("id")))) {
             try {
-                
+
                 request.setAttribute("exito", "Usuario eliminado correctamente");
                 request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
-                java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex.getMessage());
             }
         } else {
             try {
@@ -223,7 +221,7 @@ public class UserController extends HttpServlet {
                 request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
-                java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex.getMessage());
             }
         }
     }
@@ -236,14 +234,15 @@ public class UserController extends HttpServlet {
             System.out.println(queryString);
             if (modelo.modificarOldPassword(Integer.parseInt(session.getAttribute("id").toString()), request.getParameter("passwd"), request.getParameter("oldPassword"))) {
                 try {
-                request.setAttribute("Success", "Contraseña cambiada correctamente.");
+                    request.setAttribute("Success", "Contraseña cambiada correctamente.");
                     request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
                 } catch (ServletException | IOException ex) {
-                request.setAttribute("Error", "Ocurrió un problema.\nNo se cambió la contraseña");
+                    log.error(ex.getMessage());
+                    request.setAttribute("Error", "Ocurrió un problema.\nNo se cambió la contraseña");
                     try {
-                    request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
+                        request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
                     } catch (ServletException | IOException ex1) {
-                        java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex1);
+                        log.error(ex.getMessage());
                     }
 
                 }
@@ -252,12 +251,12 @@ public class UserController extends HttpServlet {
                 try {
                     request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
                 } catch (ServletException | IOException ex1) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex1);
+                    log.error(ex1.getMessage());
                 }
             }
 
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

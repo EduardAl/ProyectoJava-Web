@@ -29,7 +29,6 @@
                                 <th scope="col">Id</th>
                                 <th scope="col">Titulo</th>
                                 <th scope="col">Descripcion</th>
-                                <th scope="col">Documento</th>
                                 <th scope="col">Porcentaje de Avance</th>
                                 <th scope="col">Programador Asignado</th>
                                 <th scope="col">Estado del caso</th>
@@ -43,9 +42,6 @@
                                     </td>
                                     <td scope="col">${casos.titulo}</td>
                                     <td scope="col">${casos.descripcion}</td>
-                                    <td scope="col">
-                                        <a href="${pageContext.request.contextPath}/case?op=obtener&file=${casos.fileDir}" class="btn btn-link m-1"><span class="oi oi-file"></span>Descargar Documento</a>
-                                    </td>
                                     <td scope="col">${casos.avance}</td>
                                     <td scope="col">${casos.asignadoA}</td>
                                     <td scope="col">${casos.estado}</td>

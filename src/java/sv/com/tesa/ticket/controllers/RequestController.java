@@ -50,7 +50,6 @@ public class RequestController extends HttpServlet {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 1024 * 5;
     static Logger log = Logger.getLogger(RequestController.class.getName());
     private RequestModel requestModel = new RequestModel();
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF8");
