@@ -374,7 +374,6 @@ public class CaseController extends HttpServlet {
                 member.put("produc", singleCaseBean.getProduccion());
                 String json = member.toString();
                 out.write(json);
-                System.out.println("JSON " + json);
             }
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());

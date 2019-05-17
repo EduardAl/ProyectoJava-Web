@@ -15,7 +15,7 @@
     </head>
     <body class="my-login-page" style="height: 100vh;
           background: linear-gradient(91deg, rgba(3,46,71,1) 0%,rgba(5,64,96,0.9) 35%, rgba(101,227,253,1) 100%);">
-          <section class="h-100">
+        <section class="h-100">
             <div class="container h-100">
                 <div class="row justify-content-md-center h-100">
                     <div class="card-wrapper">
@@ -77,22 +77,24 @@
                             </div>
                         </div>
                         <div class="footer">
+                            <jsp:include page="/footer.jsp"/>
+                            <script>
+                                <c:if test="${not empty exito}">
+                                alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                <c:if test="${not empty fracaso}">
+                                alertify.error('${fracaso}');
+                                    <c:set var="fracaso" value="" scope="session" />
+                                </c:if>
+                            </script>
                             Copyright &copy; 2019 &mdash; Telecomunicaciones Salvadoreñas 
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <script>
-            <c:if test="${not empty exito}">
-            alertify.success('${exito}');
-                <c:set var="exito" value="" scope="session" />
-            </c:if>
-            <c:if test="${not empty fracaso}">
-            alertify.error('${fracaso}');
-                <c:set var="fracaso" value="" scope="session" />
-            </c:if>
-        </script>
+                            
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/js/my-login.js"></script>
     </body>

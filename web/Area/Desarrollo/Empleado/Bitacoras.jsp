@@ -77,7 +77,7 @@
 
 
 
-        <div class="modal fade" id="myModal">
+        <div class="modal fade modal-md" id="myModal">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <!-- Modal Header -->
@@ -115,44 +115,46 @@
 
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <div id="form-add" class="row">
-                            <form method="post" action="${pageContext.request.contextPath}/bitacoras?op=agregar">
-                            
-                                <input type="hidden" name="case_id" value="${requestScope.singleCaseBean.id}" />
-                                
-                            <div class="form-group">
-                                <label for="comentario">Comentario:</label>
-                                <!--Material textarea-->
-                                <div class="form-group">
-                                    <textarea id="comment" name="comment" class="form-control" rows="3" placeholder="Ingresa el comentario" required></textarea>
+                        <div class="container container-fluid">
+                            <div id="form-add" class="row">
+                                <form method="post" action="${pageContext.request.contextPath}/bitacoras?op=agregar">
 
-                                </div>
+                                    <input class="form-control" type="hidden" name="case_id" value="${requestScope.singleCaseBean.id}" />
 
+                                    <div class="form-group">
+                                        <label for="comentario">Comentario:</label>
+                                        <!--Material textarea-->
+                                        <div class="form-group">
+                                            <textarea rows="5" id="comment" name="comment" class="form-control" rows="3" placeholder="Ingresa el comentario" required></textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="percent">Porcentaje:</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" min="0.00" step="1" name="percent" id="percent"  placeholder="Ingresa el porecentaje" required>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="agregar" />
+                                    </div>
+
+                                </form>
                             </div>
-
-                                <div class="form-group">
-                                <label for="percent">Porcentaje:</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control" min="0.00" step="1" name="percent" id="percent"  placeholder="Ingresa el porecentaje" required>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                                </div>
-                            </div>
-                                <div class="form-group">
-                                    <input type="submit" value="agregar" />
-                                </div>
-                                
-                            </form>
                         </div>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
 
-                        
+
                         <div class="row">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
-                        
+
                     </div>
 
                 </div>
