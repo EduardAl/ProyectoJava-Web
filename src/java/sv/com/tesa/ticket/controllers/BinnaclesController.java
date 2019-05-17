@@ -88,6 +88,9 @@ public class BinnaclesController extends HttpServlet {
                  case "agregar":
                     agregar(request, response);
                     break;
+                 case "eliminar":
+                    eliminar(request, response);
+                    break;
                 default:
                     throw new AssertionError();
             }
@@ -191,6 +194,16 @@ public class BinnaclesController extends HttpServlet {
             request.setAttribute("id", binnaclesBean.getCaseId());
             this.listarBitacoras(request, response);
         
+    }
+
+    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+        BinnaclesBean binnaclesBean = new BinnaclesBean();
+            
+            binnaclesBean.setCaseId(request.getParameter("case_id"));
+            int id = Integer.parseInt(request.getParameter("binnacle_id"));
+            binnacleModel.removeBinnacle(id);
+            request.setAttribute("id", binnaclesBean.getCaseId());
+            this.listarBitacoras(request, response);
     }
    
     
