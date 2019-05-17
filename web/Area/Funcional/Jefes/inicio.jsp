@@ -16,5 +16,4 @@
     <body>
         <jsp:include page="/Area/Funcional/Jefes/menu.jsp"/>
     </body>
-    <jsp:include page="/footer.jsp"/>
 </html>
