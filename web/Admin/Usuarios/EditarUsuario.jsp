@@ -86,6 +86,7 @@
                                         <label for="jefe">Jefe:</label>
                                         <div class="input-group">
                                             <select name="jefe" id="jefe" class="form-control">
+                                               <option value="">Sin jefe</option>
                                                 <c:forEach items= "${requestScope.listarEmpleados}" var="jefes">
                                                     <c:choose>
                                                         <c:when  test = "${requestScope.usuario.chief == jefes.nombre}">
