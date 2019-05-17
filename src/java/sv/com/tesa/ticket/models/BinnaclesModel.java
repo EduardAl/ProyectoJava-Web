@@ -6,9 +6,12 @@
 package sv.com.tesa.ticket.models;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.BinnaclesBean;
+import static sv.com.tesa.ticket.models.Conexion.conexion;
 import sv.com.tesa.ticket.utils.Utilidades;
 
 /**
@@ -17,19 +20,36 @@ import sv.com.tesa.ticket.utils.Utilidades;
  */
 public class BinnaclesModel extends Conexion{
     
-    public JTable getBinnacles(String idCase)
+    public List<BinnaclesBean> getBinnacles(String caseId)
     {
         try {
+            
+            List<BinnaclesBean> list = new ArrayList<>();
+            //String sql = "CALL  sp_select_binnacle_cases(?)";
             String sql = "CALL  sp_select_binnacle_cases(?)";
+            
             this.conectar();
             st = conexion.prepareStatement(sql);
-            st.setString(1, idCase);
+            st.setString(1, caseId);
             rs = st.executeQuery();
             rs = st.getResultSet();
-            String[] col={"Id","Caso Numero","Comentario","Fecha"};
-            JTable tabla = Utilidades.cargarTabla(col, rs);
             
-            return tabla;
+            while(rs.next()){
+                BinnaclesBean binnaclesBean = new BinnaclesBean();
+                
+                binnaclesBean.setId(rs.getInt("id"));
+                binnaclesBean.setCaseId(caseId);
+                binnaclesBean.setCommentary(rs.getString("comentario"));
+                binnaclesBean.setPercent(rs.getDouble("percent"));
+                binnaclesBean.setCreatedAt(rs.getString("created_at"));
+                
+                list.add(binnaclesBean);
+                
+                System.out.println(binnaclesBean.getCommentary());
+                
+            }
+            
+            return list;
         } catch (SQLException ex) {
             Logger.getLogger(RecentCasesModel.class).error("Error al obtener los datos",ex);
             return null;
@@ -44,14 +64,14 @@ public class BinnaclesModel extends Conexion{
         }
     }
     
-    public boolean insertBinnacle(BinnaclesBean binnaclesBean, Double percent){
+    public boolean insertBinnacle(BinnaclesBean binnaclesBean){
         Integer rows = 0;
         try {
             String sql = "CALL  sp_insert_binnacle_cases(?, ?, ?)";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setString(1, binnaclesBean.getCaseId());
-            st.setDouble(2, percent);
+            st.setDouble(2, binnaclesBean.getPercent());
             st.setString(3, binnaclesBean.getCommentary());
 
             rows= st.executeUpdate();

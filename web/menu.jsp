@@ -1,5 +1,9 @@
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <jsp:include page="/cambiarPassword.jsp"/>
+    </head>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Administrador</a>
+    <a class="navbar-brand" href="#"><% out.print(session.getAttribute("rol")); %></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,20 +39,21 @@
                 </div>
             </li>
         </ul>
-            <ul class="nav navbar-nav navbar-right">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">
-								<span class="oi oi-cog"></span> Editar</a>
-							</li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
-								<span class="oi oi-account-logout"></span> Cerrar Sesión</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="oi oi-person" title="login" aria-hidden="true"></span> <% out.print(session.getAttribute("nombre"));%>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" data-toggle="modal" data-target="#myModal">
+                            <span class="oi oi-cog" ></span> Editar</a>
+                    </li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
+                            <span class="oi oi-account-logout"></span> Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
+
 </nav>

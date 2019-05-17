@@ -7,48 +7,36 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp"><span class="oi oi-home"></span> Inicio<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/Area/Funcional/Jefes/inicio.jsp"><span class="oi oi-home"></span> Inicio<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="oi oi-people"></span>
-                    Casos
+                    Peticiones
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=nuevo">
-                        <span class="oi oi-person"></span>  Ver Casos</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/usuarios?op=listar">
-                        <span class="oi oi-menu"></span>  Crear un nuevo caso</a>    
-                    <div class="dropdown-divider"></div>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="oi oi-hard-drive"></span> Departamentos
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">
-                        <span class="oi oi-plus"></span> Nuevo departamento</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">
-                        <span class="oi oi-grid-two-up"></span> Ver departamentos</a>    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/request?op=listar">
+                        <span class="oi oi-person"></span>Ver Peticiones</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/request?op=nuevo">
+                        <span class="oi oi-menu"></span>Crear una nueva peticion</a>    
                     <div class="dropdown-divider"></div>
                 </div>
             </li>
         </ul>
-            <ul class="nav navbar-nav navbar-right">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">
-								<span class="oi oi-cog"></span> Editar</a>
-							</li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
-								<span class="oi oi-account-logout"></span> Cerrar Sesión</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">
+                            <span class="oi oi-cog"></span> Editar</a>
+                    </li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
+                            <span class="oi oi-account-logout"></span> Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </nav>
