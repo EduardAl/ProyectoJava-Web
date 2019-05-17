@@ -22,33 +22,21 @@
                     <div class="dropdown-divider"></div>
                 </div>
             </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="oi oi-hard-drive"></span> Departamentos
+                    <span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">
-                        <span class="oi oi-plus"></span> Nuevo departamento</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">
-                        <span class="oi oi-grid-two-up"></span> Ver departamentos</a>    
-                    <div class="dropdown-divider"></div>
-                </div>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">
+                            <span class="oi oi-cog"></span> Editar</a>
+                    </li>
+                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
+                            <span class="oi oi-account-logout"></span> Cerrar Sesión</a>
+                    </li>
+                </ul>
             </li>
         </ul>
-            <ul class="nav navbar-nav navbar-right">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="oi oi-person" title="login" aria-hidden="true"></span> Mi Cuenta
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">
-								<span class="oi oi-cog"></span> Editar</a>
-							</li>
-							<li><a class="dropdown-item" href="${pageContext.request.contextPath}/cerrarSesion.jsp">
-								<span class="oi oi-account-logout"></span> Cerrar Sesión</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
     </div>
 </nav>
