@@ -6,29 +6,15 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true" %>
-<% HttpSession sesion = request.getSession(false); 
-    if(sesion.getAttribute("nombre") != null)
-    {
-        sesion.getAttribute("nombre");
-        if(!sesion.getAttribute("rol").toString().equals("Jefe de desarrollo"))
-        {
-            sesion.setAttribute("Error", "Error de usuario.");
-            response.sendRedirect("../index.jsp");
-        }
-    }
-    else
-    {
-        sesion.setAttribute("Error", "Debe iniciar sesión.");
-        response.sendRedirect("../index.jsp");
-    }
-%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <jsp:include page="/cabecera.jsp"/>
         <title>Inicio</title>
     </head>
     <body>
-        <h1>Ha iniciado sesión como <% out.print(sesion.getAttribute("rol")); %> </h1>
+        <jsp:include page="/Area/Desarrollo/Jefes/menu.jsp"/>
     </body>
+    <jsp:include page="/footer.jsp"/>
 </html>

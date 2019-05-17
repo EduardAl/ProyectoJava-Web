@@ -13,6 +13,20 @@ import java.sql.Timestamp;
  */
 public class CaseBean {
 
+    /**
+     * @return the fileDir
+     */
+    public String getFileDir() {
+        return fileDir;
+    }
+
+    /**
+     * @param fileDir the fileDir to set
+     */
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
+    }
+
 
     private String id;
     private int idSolicitud;
@@ -26,6 +40,7 @@ public class CaseBean {
     private String fechaActualizacion;
     private String fechaImplementacion;
     private String departamento;
+    private String fileDir;
     
     public CaseBean()
     {

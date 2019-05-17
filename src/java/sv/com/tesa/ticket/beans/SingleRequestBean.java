@@ -21,6 +21,7 @@ public class SingleRequestBean {
     private String fechaCreacion;
     private String fechaModificacion;
     private String tipoPeticion;
+    private String fileDir;
             
     public SingleRequestBean()
     {
@@ -165,6 +166,16 @@ public class SingleRequestBean {
      */
     public void setTipoPeticion(String tipoPeticion) {
         this.tipoPeticion = tipoPeticion;
+    }
+    
+    public String getFileDir()
+    {
+        return this.fileDir;
+    }
+    
+    public void setFileDir(String fileDir)
+    {
+        this.fileDir = fileDir;
     }
     
 }
