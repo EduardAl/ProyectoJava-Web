@@ -25,9 +25,12 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import sv.com.tesa.ticket.beans.CaseBean;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
+import sv.com.tesa.ticket.beans.SingleCaseBean;
+import sv.com.tesa.ticket.beans.SingleRequestBean;
 import static sv.com.tesa.ticket.controllers.RequestController.log;
 import sv.com.tesa.ticket.models.CasesModel;
 import sv.com.tesa.ticket.models.RequestModel;
@@ -62,11 +65,13 @@ public class CaseController extends HttpServlet {
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
                 sesion.getAttribute("nombre");
                 if (!sesion.getAttribute("rol").toString().equals("Jefe de desarrollo")) {
+                    log.error("Error de tipo de usuario.");
                     request.setAttribute("Error", "Error de usuario.");
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
             } else {
                 request.setAttribute("Error", "Debe iniciar sesión.");
+                log.error("Debe iniciar sesión.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
             String operacion = request.getParameter("op");
@@ -94,6 +99,9 @@ public class CaseController extends HttpServlet {
                     break;
                 case "tester":
                     asignarTester(request, response);
+                    break;
+                case "individualCase":
+                    detalles(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -341,6 +349,36 @@ public class CaseController extends HttpServlet {
         {
             request.setAttribute("fracaso", "Ocurrió un error al cambiar tester.");
             listarCasos(request, response);
+        }
+    }
+
+    private void detalles(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            SingleCaseBean caso = new SingleCaseBean();
+            caso.setId(request.getParameter("id"));
+            System.out.println("Entra");
+            SingleCaseBean singleCaseBean = caseModel.listarCaso(caso);
+            try (PrintWriter out = response.getWriter()) {
+                response.setContentType("json");
+                
+                JSONObject member = new JSONObject();
+                member.put("codigo", String.valueOf(singleCaseBean.getId()));
+                member.put("nombre", singleCaseBean.getTitulo());
+                member.put("asignado", singleCaseBean.getAsignadoA());
+                member.put("estado", singleCaseBean.getEstado());
+                member.put("descripcion", singleCaseBean.getDescripcion());                
+                member.put("porcentaje", singleCaseBean.getAvance().toString());
+                member.put("tester", singleCaseBean.getTester());
+                member.put("fechac", singleCaseBean.getFechaCreacion());
+                member.put("fechaa", singleCaseBean.getUltimoCambio());
+                member.put("creado", singleCaseBean.getCreadoPor());
+                member.put("fechalim", singleCaseBean.getLimite());
+                member.put("produc", singleCaseBean.getProduccion());
+                String json = member.toString();
+                out.write(json);
+            }
+        } catch (IOException ex) {
+            log.error("Error: " + ex.getMessage());
         }
     }
 }

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -33,6 +33,7 @@ import sv.com.tesa.ticket.models.UsersModel;
 @WebServlet(name = "ResetEmailController", urlPatterns = {"/ResetPassword"})
 public class ResetEmailController extends HttpServlet {
 
+    Logger LOGGER = Logger.getLogger(ResetEmailController.class);
     UsersModel modelo = new UsersModel();
 
     /**
@@ -58,7 +59,7 @@ public class ResetEmailController extends HttpServlet {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage());
         }
     }
 
@@ -281,15 +282,16 @@ public class ResetEmailController extends HttpServlet {
             }
         } catch (ServletException | IOException ex) {
 
+            LOGGER.error(ex.getMessage());
             try {
                 request.setAttribute("Error", "El usuario ingresado no existe.");
                 try {
                     request.getRequestDispatcher("/forgot.jsp").forward(request, response);
                 } catch (IOException ex1) {
-                    Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex1);
+                    LOGGER.error(ex1.getMessage());
                 }
             } catch (ServletException ex1) {
-                Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex1);
+                LOGGER.error(ex1.getMessage());
             }
         }
     }
@@ -341,8 +343,7 @@ public class ResetEmailController extends HttpServlet {
             System.out.println("Sent message successfully....");
 
         } catch (MessagingException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            Logger.getLogger(ResetEmailController.class).error(e.getMessage());
         }
     }
 
@@ -354,11 +355,11 @@ public class ResetEmailController extends HttpServlet {
                     request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
                 } catch (ServletException | IOException ex) {
                     try {
-                        Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ResetEmailController.class).error(ex.getMessage());
                         request.setAttribute("Error", "Ocurrió 2 un problema.");
                         request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
                     } catch (ServletException | IOException ex1) {
-                        Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex1);
+                        Logger.getLogger(ResetEmailController.class).error(ex1.getMessage());
                     }
                 }
             } else {
@@ -366,7 +367,7 @@ public class ResetEmailController extends HttpServlet {
                 try {
                     request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
                 } catch (ServletException | IOException ex) {
-                    Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ResetEmailController.class).error(ex.getMessage());
                 }
             }
         } catch (NumberFormatException e) {
@@ -374,7 +375,7 @@ public class ResetEmailController extends HttpServlet {
             try {
                 request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
             } catch (ServletException | IOException ex) {
-                Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ResetEmailController.class).error(ex.getMessage());
             }
         }
 

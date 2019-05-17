@@ -50,7 +50,6 @@ public class RequestController extends HttpServlet {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 1024 * 5;
     static Logger log = Logger.getLogger(RequestController.class.getName());
     private RequestModel requestModel = new RequestModel();
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF8");
@@ -384,7 +383,6 @@ HttpSession sesion = request.getSession(false);
                 member.put("fechaa", requestBean.getFechaModificacion());
                 String json = member.toString();
                 out.write(json);
-                System.out.println("JSON " + json);
             }
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());

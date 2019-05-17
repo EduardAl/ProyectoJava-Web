@@ -23,7 +23,7 @@ import sv.com.tesa.ticket.models.TesterModel;
  */
 @WebServlet(name = "TesterController", urlPatterns = {"/tester"})
 public class TesterController extends HttpServlet {
-
+    Logger LOGGER = Logger.getLogger(TesterController.class);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -123,7 +123,7 @@ public class TesterController extends HttpServlet {
             request.setAttribute("listarCasos", testerModel.listarCasosTester());
             request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            log.error("Error: " + ex.getMessage());
+            LOGGER.error(ex.getMessage());
         }
     }
     
@@ -164,7 +164,7 @@ public class TesterController extends HttpServlet {
                 }
             }
         } catch (Exception ex) {
-            log.error("Error: " + ex.getMessage());
+            LOGGER.error(ex.getMessage());
         }
     }
 

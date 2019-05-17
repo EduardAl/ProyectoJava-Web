@@ -89,5 +89,27 @@ public class BinnaclesModel extends Conexion{
         return rows > 0;
     
     }
+
+    public boolean removeBinnacle(int id) {
+         Integer rows = 0;
+        try {
+            String sql = "delete from binnacle where id = ?";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, id);
+            rows= st.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(RecentCasesModel.class).error("Error al obtener los datos",ex);
+        }
+        finally
+        {
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(RecentCasesModel.class).error("Error al cerrar la conexiòn.",ex);
+            }
+        }
+        return rows > 0;
+    }
     
 }
