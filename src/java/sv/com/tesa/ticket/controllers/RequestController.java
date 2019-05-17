@@ -247,7 +247,7 @@ public class RequestController extends HttpServlet {
             //copy binary contect to output stream
             while(fileIn.read(outputByte, 0, 4096) != -1)
             {
-                    out.write(outputByte, 0, 4096);
+                out.write(outputByte, 0, 4096);
             }
             fileIn.close();
             out.flush();
