@@ -17,7 +17,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,7 +64,7 @@ public class ResetEmailController extends HttpServlet {
 
     private void emailRecover(HttpServletRequest request, HttpServletResponse response) {
         try {
-            
+
             StringBuffer url = request.getRequestURL();
             String uri = request.getRequestURI();
             String ctx = request.getContextPath();
@@ -80,7 +79,7 @@ public class ResetEmailController extends HttpServlet {
                         + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
                         + " \n"
                         + "<head>\n"
-                        + "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+                        + "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
                         + "  <title>Email de recuperación</title>\n"
                         + "  <style type=\"text/css\">\n"
                         + "  body {margin: 0; padding: 0; min-width: 100%!important;}\n"
@@ -295,7 +294,7 @@ public class ResetEmailController extends HttpServlet {
         }
     }
 
-    private static void sendMail(String destinatario, String asunto, String cuerpo) {        
+    private static void sendMail(String destinatario, String asunto, String cuerpo) {
 // Recipient's email ID needs to be mentioned.
 
         // Sender's email ID needs to be mentioned
@@ -334,9 +333,7 @@ public class ResetEmailController extends HttpServlet {
             message.setSubject("Recuperación de cuenta.");
 
             // Send the actual HTML message, as big as you like
-            message.setContent(
-                    cuerpo,
-                    "text/html");
+            message.setContent(cuerpo, "text/html");
 
             // Send message
             Transport.send(message);
@@ -359,7 +356,7 @@ public class ResetEmailController extends HttpServlet {
                     try {
                         Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
                         request.setAttribute("Error", "Ocurrió 2 un problema.");
-                    request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
+                        request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
                     } catch (ServletException | IOException ex1) {
                         Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex1);
                     }
@@ -374,11 +371,11 @@ public class ResetEmailController extends HttpServlet {
             }
         } catch (NumberFormatException e) {
             request.setAttribute("Error", "Usuario no encontrado.");
-                try {
-                    request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
-                } catch (ServletException | IOException ex) {
-                    Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                request.getRequestDispatcher("/reset.jsp?id=" + sesion.getAttribute("id")).forward(request, response);
+            } catch (ServletException | IOException ex) {
+                Logger.getLogger(ResetEmailController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }

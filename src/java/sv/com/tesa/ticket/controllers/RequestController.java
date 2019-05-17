@@ -25,7 +25,6 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.RequestModel;
@@ -370,22 +369,22 @@ HttpSession sesion = request.getSession(false);
         try {
             Integer codigo = Integer.parseInt(request.getParameter("id"));
             SingleRequestBean requestBean = requestModel.obtenerPeticionIndividual(codigo);
-            PrintWriter out = response.getWriter();
-            response.setContentType("json");  // Set content type of the response so that jQuery knows what it can expect.
- 
-            JSONObject member = new JSONObject();
-            member.put("codigo", String.valueOf(requestBean.getId()));
-            member.put("nombre", requestBean.getTitulo().toString());
-            member.put("tipo", requestBean.getTipoPeticion().toString());
-            member.put("departamento", requestBean.getDepartamento().toString());
-            member.put("descripcion", requestBean.getDescripcion().toString());
-            member.put("creado", requestBean.getCreadoPor().toString());
-            member.put("estado", requestBean.getEstado().toString());
-            member.put("fechac", requestBean.getFechaCreacion().toString());
-            String json = member.toString();
-            out.write(json);
-            System.out.println("JSON " + json);
-            out.close();
+            try (PrintWriter out = response.getWriter()) {
+                response.setContentType("json");
+                
+                JSONObject member = new JSONObject();
+                member.put("codigo", String.valueOf(requestBean.getId()));
+                member.put("nombre", requestBean.getTitulo());
+                member.put("tipo", requestBean.getTipoPeticion());
+                member.put("departamento", requestBean.getDepartamento());
+                member.put("descripcion", requestBean.getDescripcion());
+                member.put("creado", requestBean.getCreadoPor());
+                member.put("estado", requestBean.getEstado());
+                member.put("fechac", requestBean.getFechaCreacion());
+                String json = member.toString();
+                out.write(json);
+                System.out.println("JSON " + json);
+            }
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
         }

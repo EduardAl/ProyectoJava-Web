@@ -249,6 +249,7 @@ public class RequestModel extends Conexion {
         }
     }
 
+    @SuppressWarnings("empty-statement")
     public SingleRequestBean obtenerPeticionIndividual(Integer id) {
         try {
             String sql = "CALL sp_select_individual_request(?)";
