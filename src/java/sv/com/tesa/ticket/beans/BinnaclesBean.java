@@ -10,11 +10,14 @@ package sv.com.tesa.ticket.beans;
  * @author vaselinux
  */
 public class BinnaclesBean {
+
+
         
     private int id;
     private String caseId;
     private String commentary;
     private String createdAt;
+    private double percent;
 
     public BinnaclesBean(String id) {
         this.caseId=id;
@@ -57,5 +60,17 @@ public class BinnaclesBean {
         this.createdAt = createdAt;
     }
     
-    
+        /**
+     * @return the percent
+     */
+    public double getPercent() {
+        return percent;
+    }
+
+    /**
+     * @param percent the percent to set
+     */
+    public void setPercent(double percent) {
+        this.percent = percent;
+    }
 }

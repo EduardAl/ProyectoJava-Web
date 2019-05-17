@@ -73,6 +73,55 @@ public class CasesModel extends Conexion{
         }
     }
     
+    
+    public ArrayList<SingleCaseBean> listarCasosPorDesarrollador(){
+        try{
+            ArrayList <SingleCaseBean> lista = new ArrayList<>();
+            String sql = "select cases.id, requests.title, cases.descrip, cases.percent, \n" +
+                            "concat(employees.fname, ' ', employees.lname) as 'asignado',\n" +
+                            "case_status.cs_name, cases.deadline, cases.file_dir from cases \n" +
+                            "inner join requests on cases.request = requests.id\n" +
+                            "inner join employees on cases.assigned_to = employees.id\n" +
+                            "inner join case_status on cases.case_status = case_status.id \n" +
+                            "where requests.department in (select departments.id from departments where departments.dname = ?)" +
+                            " and assigned_to = ? ;";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, LoginBean.getDepartamento());
+            st.setInt(2, LoginBean.getId());
+            rs = st.executeQuery();
+            while(rs.next()){
+                SingleCaseBean obj = new SingleCaseBean();
+                obj.setId(rs.getString("id"));
+                System.out.println(obj.getId());
+                obj.setTitulo(rs.getString("title"));
+                obj.setDescripcion(rs.getString("descrip"));
+                obj.setAvance(rs.getDouble("percent"));
+                obj.setAsignadoA(rs.getString("asignado"));
+                obj.setEstado(rs.getString("cs_name"));
+                obj.setLimite(rs.getString("deadline"));
+                obj.setFileDir(rs.getString("file_dir"));
+                lista.add(obj);
+            }
+            return lista;
+        }catch(SQLException ex){
+            Logger.getLogger(CasesModel.class).error("Error al listar "
+                    + "casos en CasesModel función listarCasos",ex);
+            ex.printStackTrace();
+            return null;
+        }
+        finally    
+        {
+                    
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+                ex.printStackTrace();
+            }
+        }
+    }
+    
  @SuppressWarnings("empty-statement")
    public SingleCaseBean listarCaso(SingleCaseBean beanCase){
         try{

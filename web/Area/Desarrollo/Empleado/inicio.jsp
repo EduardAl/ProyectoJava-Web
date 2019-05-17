@@ -27,8 +27,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Inicio</title>
+        <jsp:include page="/cabecera.jsp"/>
     </head>
     <body>
+        <jsp:include page="menu.jsp"/>
         <h1>Ha iniciado sesión como <% out.print(sesion.getAttribute("rol")); %> </h1>
     </body>
     <jsp:include page="/footer.jsp"/>
