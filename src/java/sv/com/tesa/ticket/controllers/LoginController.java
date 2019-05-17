@@ -6,15 +6,15 @@
 package sv.com.tesa.ticket.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter; 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.LoginModel;
 
@@ -34,6 +34,8 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            Logger LOGGER = Logger.getLogger(LoginController.class);
+            LOGGER.info("This is a logging statement from log4j");
             /* TODO output your page here. You may use following sample code. */
             String correo;
             String password;
@@ -70,7 +72,7 @@ public class LoginController extends HttpServlet {
                         sesion.setAttribute("correo", LoginBean.getCorreo());
                         sesion.setAttribute("jefe", LoginBean.getJefe());
                         sesion.setAttribute("departamento", LoginBean.getDepartamento());
-                        request.setAttribute("Error", usuario.getError());
+                        request.setAttribute("fracaso", usuario.getError());
                         if (sesion.getAttribute("rol").equals("Administrador")) {
                             rd = request.getRequestDispatcher("Admin/admin.jsp");
                             rd.forward(request, response);
@@ -89,7 +91,7 @@ public class LoginController extends HttpServlet {
 
                         }
                     } else {
-                        request.setAttribute("Error", usuario.getError());
+                        request.setAttribute("fracaso", usuario.getError());
                         rd = request.getRequestDispatcher("index.jsp");
                         rd.forward(request, response);
                     }
@@ -98,7 +100,7 @@ public class LoginController extends HttpServlet {
             } catch (IOException | ServletException e) {
             }
         } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginController.class.getName()).log(Priority.ERROR, ex.getMessage());
         }
     }
 

@@ -19,7 +19,7 @@ import sv.com.tesa.ticket.beans.Usuarios;
  */
 public class UsersModel extends Conexion
 {
-    public ArrayList<Usuarios> listarUsuarios() throws SQLException
+    public ArrayList<Usuarios> listarUsuarios()
     {
         ArrayList<Usuarios> lista = new ArrayList<>();
         try {
@@ -47,16 +47,21 @@ public class UsersModel extends Conexion
         }
         finally
         {
-            this.desconectar();
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(UsersModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     public Usuarios obtenerUsuario(Integer id)
     {
         try {
-            String sql = "CALL sp_select_individual_user(?);";
+            String sql = "CALL sp_select_individual_user(?)";
             this.conectar();
             st = conexion.prepareStatement(sql);
+            
             st.setInt(1, id);
             rs = st.executeQuery();
             Usuarios usuarios = new Usuarios();
@@ -131,6 +136,41 @@ public class UsersModel extends Conexion
             st.setString(7, beanEmpleado.getDepartamento());
             st.setBoolean(8, op);
             st.setInt(9, beanEmpleado.getJefe());
+            int resultado = st.executeUpdate();
+            this.desconectar();
+            return resultado > 0;
+        } catch (SQLException e) {
+            org.apache.log4j.Logger.getLogger(UsersModel.class).error("Error al modificar "
+                    + "jefes en función modificarJefe",e);
+            return false;
+        }
+    }
+    public boolean modificarPassword(Integer id, String passwd)
+    {
+         try {
+            String sql = "CALL sp_update_password(?, ?)";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, id);            
+            st.setString(2, passwd);
+            int resultado = st.executeUpdate();
+            this.desconectar();
+            return resultado > 0;
+        } catch (SQLException e) {
+            org.apache.log4j.Logger.getLogger(UsersModel.class).error("Error al modificar "
+                    + "jefes en función modificarJefe",e);
+            return false;
+        }
+    }
+    public boolean modificarOldPassword(Integer id, String passwd, String oldPass)
+    {
+         try {
+            String sql = "CALL sp_update_password_old(?, ?, ?)";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setInt(1, id);            
+            st.setString(2, passwd);            
+            st.setString(3, oldPass);
             int resultado = st.executeUpdate();
             this.desconectar();
             return resultado > 0;
