@@ -10,7 +10,7 @@
     <body>
         <c:set var="val" value="0"/>
         <div class="timeline">
-            <c:forEach items="${requestScope.listarEventos}" var="evento">
+            <c:forEach items="${sessionScope.listarEventos}" var="evento">
                 <c:choose> 
                     <c:when test="${val == '0'}">
                         <div class="container left">

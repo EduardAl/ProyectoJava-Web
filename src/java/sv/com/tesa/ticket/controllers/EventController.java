@@ -59,7 +59,7 @@ public class EventController extends HttpServlet {
             }
             
             try {
-            request.setAttribute("listarEventos", eventModel.listarEvents(userRol, userId));
+            sesion.setAttribute("listarEventos", eventModel.listarEvents(userRol, userId));
             request.getRequestDispatcher("/Area/Funcional/Jefes/eventos.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
             log.error("Error: " + ex.getMessage());
