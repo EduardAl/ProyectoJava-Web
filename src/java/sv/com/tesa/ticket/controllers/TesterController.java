@@ -12,7 +12,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
+import sv.com.tesa.ticket.beans.CaseBean;
+import sv.com.tesa.ticket.models.TesterModel;
 /**
  *
  * @author eduar
@@ -29,20 +33,49 @@ public class TesterController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    TesterModel testerModel = new TesterModel();
+    static Logger log = Logger.getLogger(DepartmentController.class.getName());
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TesterController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TesterController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            HttpSession sesion = request.getSession(false);
+            if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
+                sesion.getAttribute("nombre");
+                if (!sesion.getAttribute("rol").toString().equals("Empleado de área funcional")) {
+                    request.setAttribute("Error", "Error de usuario.");
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                }
+            } else {
+                request.setAttribute("Error", "Debe iniciar sesión.");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
+            }
+            String operacion = request.getParameter("op");
+            switch (operacion) {
+                case "listar":
+                    listar(request, response);
+                    break;
+                case "aceptar":
+                    verificarEstadoCaso(request, response);
+                    break;
+                case "denegar":
+                    verificarEstadoCaso(request, response);
+                    break;
+                case "obtener":
+                    //obtener(request, response);
+                    break;
+                case "modificar":
+                    //modificar(request, response);
+                    break;
+                case "eliminar":
+                    //eliminar(request, response);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
         }
     }
 
@@ -84,5 +117,55 @@ public class TesterController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private void listar(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setAttribute("listarCasos", testerModel.listarCasosTester());
+            request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            log.error("Error: " + ex.getMessage());
+        }
+    }
+    
+    private void verificarEstadoCaso(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            CaseBean caso = new CaseBean();
+            caso.setId(request.getParameter("id"));
+            String estado = testerModel.regresarEstado(caso);
+            if (estado.equals("Esperando aprobación del área solicitante")) {
+                String operacion = request.getParameter("op");
+                if (operacion.equals("aceptar")) {
+                    testerModel.aceptarCaso(caso);
+                    request.setAttribute("MensajeExito", "El caso ha sido aceptado, ya no se te"
+                            + " mostrara en tus casos pendientes");
+                    request.setAttribute("listarCasos", testerModel.listarCasosTester());
+                    request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
+                }
+                if (operacion.equals("denegar")) {
+                    caso.setId(request.getParameter("id"));
+                    caso.setComentario(request.getParameter("comentario"));
+                    testerModel.denegarCaso(caso);
+                    request.setAttribute("MensajeDenegado", "El caso ha sido denegado, ya no se te"
+                            + " mostrara en tus casos pendientes");
+                    request.setAttribute("listarCasos", testerModel.listarCasosTester());
+                    request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
+                }
+            } else {
+                String op = request.getParameter("op");
+                if (op.equals("aceptar")) {
+                    request.setAttribute("ErrorModificar", "Solo se puede modificar una peticion rechazada");
+                    request.setAttribute("listarCasos", testerModel.listarCasosTester());
+                    request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
+                }
+                if (op.equals("denegar")) {
+                    request.setAttribute("ErrorEliminar", "Solo se puede eliminar una peticion rechazada");
+                    request.setAttribute("listarCasos", testerModel.listarCasosTester());
+                    request.getRequestDispatcher("/Area/Funcional/Empleado/listaCasos.jsp").forward(request, response);
+                }
+            }
+        } catch (Exception ex) {
+            log.error("Error: " + ex.getMessage());
+        }
+    }
 
 }

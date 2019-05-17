@@ -32,7 +32,7 @@ public class DepartmentController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html; charset=Latin1");
+        response.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
