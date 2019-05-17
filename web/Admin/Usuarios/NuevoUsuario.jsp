@@ -52,6 +52,7 @@
                             <label for="jefe">Jefe:</label>
                             <div class="input-group">
                                 <select name="jefe" id="jefe" class="form-control">
+                                    <option value="">Sin jefe</option>
                                     <c:forEach items= "${requestScope.listarEmpleados}" var="jefes">
                                         <option value ="${jefes.id}">${jefes.nombre}</option>
                                     </c:forEach>
