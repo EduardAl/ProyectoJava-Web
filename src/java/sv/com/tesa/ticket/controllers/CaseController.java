@@ -74,8 +74,8 @@ public class CaseController extends HttpServlet {
                 case "nuevo":
                     nuevoCaso(request, response);
                     break;
-                case "insertar":
-                    //insertar(request, response);
+                case "listarCasos":
+                    listarCasos(request, response);
                     break;
                 case "modificar":
                     //verificarEstadoRequest(request, response);
@@ -233,6 +233,57 @@ public class CaseController extends HttpServlet {
     }
     
     private void obtenerDocPeticion(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            //Obtengo el nombre del archivo
+            String fileName = request.getParameter("file");
+            
+            //Esto hace que funcione, ni idea por que, lo lei en stack overflow
+            response.reset();
+            
+            //Obtengo el nombre de la carpeta donde estan
+            ServletContext ctx = getServletContext();
+            String storeLocation = ctx.getInitParameter("FileLocation");
+            
+            //Obtengo el archivo de la carpeta
+            File file = new File(storeLocation + File.separator + fileName);
+            
+            //Set el tipo de contenido de la respuesta
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", ("attachment;filename=" + fileName));
+            response.setHeader("Content-Length", String.valueOf(file.length()));
+            
+            FileInputStream fileIn = new FileInputStream(file);
+            OutputStream out = response.getOutputStream();
+            
+            byte[] outputByte = new byte[4096];
+            //copy binary contect to output stream
+            while(fileIn.read(outputByte, 0, 4096) != -1)
+            {
+                    out.write(outputByte, 0, 4096);
+            }
+            fileIn.close();
+            out.flush();
+            out.close();
+            
+            
+        } catch (IOException ex) {
+            log.error("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    private void listarCasos(HttpServletRequest request, HttpServletResponse response)
+    {
+        try {
+            request.setAttribute("listaCasos", caseModel.listarCasos());
+            request.getRequestDispatcher("/Area/Desarrollo/Jefes/listaCasos.jsp").forward(request, response);
+        } catch (ServletException | IOException ex) {
+            //log.error("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    private void obtener(HttpServletRequest request, HttpServletResponse response) {
         try {
             //Obtengo el nombre del archivo
             String fileName = request.getParameter("file");

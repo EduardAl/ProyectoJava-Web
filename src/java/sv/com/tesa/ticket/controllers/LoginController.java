@@ -43,7 +43,6 @@ public class LoginController extends HttpServlet {
             LoginBean usuario = user.validar(correo, password);
             RequestDispatcher rd;
             HttpSession sesion = request.getSession(false);
-            System.out.println(sesion.getAttribute("rol"));
             try {
                 if (sesion.getAttribute("rol") != null) {
                     if (sesion.getAttribute("rol").equals("Administrador")) {

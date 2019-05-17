@@ -25,10 +25,8 @@
                     <span class="oi oi-hard-drive"></span> Casos
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=nuevo">
-                        <span class="oi oi-plus"></span> Nuevo departamento</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/departamentos?op=listar">
-                        <span class="oi oi-grid-two-up"></span> Ver departamentos</a>    
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/case?op=listarCasos">
+                        <span class="oi oi-plus"></span> Ver Casos</a> 
                     <div class="dropdown-divider"></div>
                 </div>
             </li>
