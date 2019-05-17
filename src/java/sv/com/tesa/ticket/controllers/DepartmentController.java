@@ -125,7 +125,7 @@ public class DepartmentController extends HttpServlet {
         try {
             request.getRequestDispatcher("/Admin/Departamentos/NuevoDepartamento.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error: " + ex.getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ public class DepartmentController extends HttpServlet {
                 request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error: " + ex.getMessage());
         }
     }
 
@@ -151,7 +151,7 @@ public class DepartmentController extends HttpServlet {
             request.setAttribute("departamento", departmentBean);
             request.getRequestDispatcher("/Admin/Departamentos/EditarDepartamento.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error: " + ex.getMessage());
         }
     }
 
@@ -166,7 +166,7 @@ public class DepartmentController extends HttpServlet {
                 request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Error: " + ex.getMessage());
         }
     }
 
@@ -176,7 +176,7 @@ public class DepartmentController extends HttpServlet {
                 request.setAttribute("listarDepartamentos", adminDeptModel.listarDept());
                 request.getRequestDispatcher("/Admin/Departamentos/ListaDepartamentos.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
-                java.util.logging.Logger.getLogger(DepartmentController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Error: " + ex.getMessage());
             }
         } else {
 

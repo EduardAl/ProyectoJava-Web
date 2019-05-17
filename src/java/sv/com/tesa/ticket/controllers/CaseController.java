@@ -24,6 +24,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 import sv.com.tesa.ticket.beans.CaseBean;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.beans.RequestBean;
@@ -50,6 +51,7 @@ public class CaseController extends HttpServlet {
     
     private RequestModel requestModel = new RequestModel();
     private CasesModel caseModel = new CasesModel();
+    static Logger log = Logger.getLogger(CaseController.class.getName());
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -141,7 +143,7 @@ public class CaseController extends HttpServlet {
             request.setAttribute("listarEmpleados", caseModel.listarEmpleadosACargo());
             request.getRequestDispatcher("/Area/Desarrollo/Jefes/listarPeticiones.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            //log.error("Error: " + ex.getMessage());
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -155,6 +157,7 @@ public class CaseController extends HttpServlet {
             request.setAttribute("ExitoDenegar", "La peticion fue denegada");
             listarRequest(request,response);
         } catch (Exception e) {
+            log.error("Error: " + e.getMessage());
         }
     }
     
@@ -227,8 +230,7 @@ public class CaseController extends HttpServlet {
                 listarRequest(request,response);
             }
         } catch (Exception ex) {
-            //log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -268,7 +270,6 @@ public class CaseController extends HttpServlet {
             
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
     
@@ -278,8 +279,7 @@ public class CaseController extends HttpServlet {
             request.setAttribute("listaCasos", caseModel.listarCasos());
             request.getRequestDispatcher("/Area/Desarrollo/Jefes/listaCasos.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            //log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error: " + ex.getMessage());
         }
     }
     
@@ -319,7 +319,6 @@ public class CaseController extends HttpServlet {
             
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 }

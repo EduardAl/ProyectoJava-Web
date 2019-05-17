@@ -35,7 +35,7 @@ public class TesterController extends HttpServlet {
      */
     
     TesterModel testerModel = new TesterModel();
-    static Logger log = Logger.getLogger(DepartmentController.class.getName());
+    static Logger log = Logger.getLogger(TesterController.class.getName());
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

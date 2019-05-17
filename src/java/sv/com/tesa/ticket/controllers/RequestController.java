@@ -354,7 +354,6 @@ HttpSession sesion = request.getSession(false);
             }
         } catch (Exception ex) {
             log.error("Error: " + ex.getMessage());
-            ex.printStackTrace();
         }
     }
 
