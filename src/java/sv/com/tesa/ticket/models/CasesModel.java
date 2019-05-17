@@ -31,17 +31,17 @@ public class CasesModel extends Conexion{
         try{
             ArrayList <SingleCaseBean> lista = new ArrayList<>();
             String sql = "select cases.id, requests.title, cases.descrip, cases.percent, \n" +
-                        "concat(employees.fname, ' ', employees.lname) as 'asignado',\n" +
-                        "case_status.cs_name, cases.deadline, cases.file_dir from cases \n" +
-                        "inner join requests on cases.request = requests.id\n" +
-                        "inner join employees on cases.assigned_to = employees.id\n" +
-                        "inner join case_status on cases.case_status = case_status.id \n" +
-                        "where requests.department in (select departments.id from departments where departments.dname = ?)";
+                            "concat(employees.fname, ' ', employees.lname) as 'asignado',\n" +
+                            "case_status.cs_name, cases.deadline, cases.file_dir from cases \n" +
+                            "inner join requests on cases.request = requests.id\n" +
+                            "inner join employees on cases.assigned_to = employees.id\n" +
+                            "inner join case_status on cases.case_status = case_status.id \n" +
+                            "where requests.department in (select departments.id from departments where departments.dname = ?);";
             this.conectar();
             st = conexion.prepareStatement(sql);
             st.setString(1, LoginBean.getDepartamento());
             rs = st.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 SingleCaseBean obj = new SingleCaseBean();
                 obj.setId(rs.getString("id"));
                 System.out.println(obj.getId());
