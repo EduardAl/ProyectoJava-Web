@@ -384,7 +384,6 @@ HttpSession sesion = request.getSession(false);
                 member.put("fechaa", requestBean.getFechaModificacion());
                 String json = member.toString();
                 out.write(json);
-                System.out.println("JSON " + json);
             }
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
