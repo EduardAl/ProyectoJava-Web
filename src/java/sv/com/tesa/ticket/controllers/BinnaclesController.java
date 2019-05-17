@@ -71,7 +71,7 @@ public class BinnaclesController extends HttpServlet {
                 case "agregar":
                     agregar(request, response);
                     break;
-                 case "eliminar":
+                case "eliminar":
                     eliminar(request, response);
                     break;
                 default:
@@ -101,6 +101,7 @@ public class BinnaclesController extends HttpServlet {
             LOGGER.error(ex.getMessage());
         }
     }
+
     private void listarCasos(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setAttribute("listaCasos", casesModel.listarCasosPorDesarrollador());
@@ -112,27 +113,36 @@ public class BinnaclesController extends HttpServlet {
 
     private void agregar(HttpServletRequest request, HttpServletResponse response) {
 
-        BinnaclesBean binnaclesBean = new BinnaclesBean();
+        try {
+            BinnaclesBean binnaclesBean = new BinnaclesBean();
 
-        binnaclesBean.setCaseId(request.getParameter("case_id"));
-        binnaclesBean.setCommentary(request.getParameter("comment"));
-        binnaclesBean.setPercent(Double.parseDouble(request.getParameter("percent")));
+            binnaclesBean.setCaseId(request.getParameter("case_id"));
+            binnaclesBean.setCommentary(request.getParameter("comment"));
+            binnaclesBean.setPercent(Double.parseDouble(request.getParameter("percent")));
 
-        binnacleModel.insertBinnacle(binnaclesBean);
-        request.setAttribute("id", binnaclesBean.getCaseId());
-        this.listarBitacoras(request, response);
+            binnacleModel.insertBinnacle(binnaclesBean);
+            request.setAttribute("id", binnaclesBean.getCaseId());
+            this.listarBitacoras(request, response);
+        } catch (NumberFormatException e) {
+
+            LOGGER.error(e.getMessage());
+        }
 
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
-        BinnaclesBean binnaclesBean = new BinnaclesBean();
-            
+        try {
+            BinnaclesBean binnaclesBean = new BinnaclesBean();
+
             binnaclesBean.setCaseId(request.getParameter("case_id"));
             int id = Integer.parseInt(request.getParameter("binnacle_id"));
             binnacleModel.removeBinnacle(id);
             request.setAttribute("id", binnaclesBean.getCaseId());
             this.listarBitacoras(request, response);
+        } catch (NumberFormatException e) {
+
+            LOGGER.error(e.getMessage());
+        }
     }
-   
-    
+
 }
