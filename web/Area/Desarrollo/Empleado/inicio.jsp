@@ -31,4 +31,5 @@
     <body>
         <h1>Ha iniciado sesión como <% out.print(sesion.getAttribute("rol")); %> </h1>
     </body>
+    <jsp:include page="/footer.jsp"/>
 </html>

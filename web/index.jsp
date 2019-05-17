@@ -13,8 +13,9 @@
         <title>Inicio de sesión</title>
         <jsp:include page="/cabecera.jsp"/>
     </head>
-    <body class="my-login-page">
-        <section class="h-100">
+    <body class="my-login-page" style="height: 100vh;
+          background: linear-gradient(91deg, rgba(3,46,71,1) 0%,rgba(5,64,96,0.9) 35%, rgba(101,227,253,1) 100%);">
+          <section class="h-100">
             <div class="container h-100">
                 <div class="row justify-content-md-center h-100">
                     <div class="card-wrapper">
@@ -57,20 +58,20 @@
                                     </div>
                                     <br>
                                     <div class="invalid-feedback d-block">
-                                    <%
-                                        HttpSession sesion = request.getSession(false);
-                                        if (sesion.getAttribute("rol") != null && sesion.getAttribute("rol") != "null") {
-                                            if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
+                                        <%
+                                            HttpSession sesion = request.getSession(false);
+                                            if (sesion.getAttribute("rol") != null && sesion.getAttribute("rol") != "null") {
+                                                if (request.getAttribute("Error") != null && request.getAttribute("Error") != "null") {
+                                                    out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
+                                                } else {
+                                                    response.sendRedirect("login");
+                                                }//Findelif
+                                            } else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
                                                 out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
-                                            } else {
-                                                response.sendRedirect("login");
-                                            }//Findelif
-                                        } else if (request.getAttribute("Error") != null && sesion.getAttribute("Error") != "null") {
-                                            out.print("<div class=\"alert alert-danger\">" + request.getAttribute("Error") + "<br></div>");
-                                        } else if (request.getAttribute("Success") != null && sesion.getAttribute("Success") != "null") {
-                                            out.print("<div class=\"alert alert-success\">" + request.getAttribute("Success") + "<br></div>");
-                                        }
-                                    %>
+                                            } else if (request.getAttribute("Success") != null && sesion.getAttribute("Success") != "null") {
+                                                out.print("<div class=\"alert alert-success\">" + request.getAttribute("Success") + "<br></div>");
+                                            }
+                                        %>
                                     </div>
                                 </form>
                             </div>

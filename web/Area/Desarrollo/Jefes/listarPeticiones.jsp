@@ -125,9 +125,9 @@
                                                                     </c:forEach>
                                                                 </select>
                                                             </div>
-                                                            
+
                                                             <div class="form-group">
-                                                                
+
                                                                 <label for="fecha">Fecha de entrega:</label>
                                                                 <fmt:formatDate var="fechaMin" value="<%=new java.util.Date()%>" pattern="yyyy-MM-dd"/>
                                                                 <input type="date" class="form-control" name="fecha" id="fecha" min="${fechaMin}">
@@ -141,10 +141,40 @@
                                                 </div>
                                             </div>
                                         </div>
-                                                            
+                                        <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"></h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul class="list-group">
+                                                            <li class="list-group-item"><b>Petición #</b><span id="codigo"></span></li>
+                                                            <li class="list-group-item"><b>Título: </b><span id="nombre"></span></li>
+                                                            <li class="list-group-item"><b>Tipo:</b>$<span id="tipo"></span></li>
+                                                            <li class="list-group-item"><b>Departamento:</b><span id="departamento"></span></li>
+                                                            <li class="list-group-item"><b>Descripción: </b><span id="descripcion"></span></li>
+                                                            <li class="list-group-item"><b>Creado por:</b><span id="creado"></span></li>
+                                                            <li class="list-group-item"><b>Estado:</b><span id="estado"></span></li>
+                                                            <li class="list-group-item"><b>Comentario:</b><span id="comentario"></span></li>
+                                                            <li class="list-group-item"><b>Fecha de creación:</b><span id="fechac"></span></li>
+                                                            <li class="list-group-item"><b>Última modificación:</b><span id="fechaa"></span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="btn-group">
-                                            <c:choose>
-                                                <c:when test="${peticiones.estado == 'En espera de respuesta'}">
+                                            <a  title="detalles" class="btn btn-default" href="javascript:detalles(${peticiones.id})"><span class="oi oi-zoom-in text-white"></span></a>
+                                                <c:choose>
+                                                    <c:when test="${peticiones.estado == 'En espera de respuesta'}">
                                                     <button class="btn btn-danger m-1" data-toggle="modal" data-target="#modal${peticiones.id}">
                                                         Denegar
                                                     </button>
@@ -170,5 +200,39 @@
                 </div>
             </div>
         </div>
+        <jsp:include page="/footer.jsp"/>
+        <script>
+            <c:if test="${not empty exito}">
+            alertify.success('${exito}');
+                <c:set var="exito" value="" scope="session" />
+            </c:if>
+            <c:if test="${not empty fracaso}">
+            alertify.error('${fracaso}');
+                <c:set var="fracaso" value="" scope="session" />
+            </c:if>
+
+            function detalles(id)
+            {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/request?op=individualRequest&id=" + id,
+                    type: "GET",
+                    success: function (data) {
+                        console.log(data);
+                        $('#codigo').text(data.codigo);
+                        $('#nombre').text(data.nombre);
+                        $('#tipo').text(data.tipo);
+                        $('#departamento').text(data.departamento);
+                        $('#descripcion').text(data.descripcion);
+                        $('#creado').text(data.creado);
+                        $('#estado').text(data.estado);
+                        $('#fechac').text(data.fechac);
+                        $('#modal').modal('show');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        </script>           
     </body>
 </html>
