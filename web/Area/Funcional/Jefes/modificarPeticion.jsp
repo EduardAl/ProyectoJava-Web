@@ -17,7 +17,7 @@
         <jsp:include page="/Area/Funcional/Jefes/menu.jsp"/>
         <div class="container-fluid">
             <h2 class="text-center m-1">Modificar Peticion</h2>
-            <form class="justify-content-center p-2" action="${pageContext.request.contextPath}/request?op=modificarBase" method="POST" enctype="multipart/form-data">
+            <form class="justify-content-center m-1" action="${pageContext.request.contextPath}/request?op=modificarBase" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="id">ID:</label>
                     <input type="number" class="form-control" id="id" name ="id" value="${peticion.id}" readonly>

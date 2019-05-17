@@ -11,18 +11,33 @@ package sv.com.tesa.ticket.beans;
  */
 public class SingleCaseBean {
 
+    /**
+     * @return the fileDir
+     */
+    public String getFileDir() {
+        return fileDir;
+    }
+
+    /**
+     * @param fileDir the fileDir to set
+     */
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
+    }
+
     private String id;
     private String titulo;
     private String creadoPor;
-    private String AsignadoA;
+    private String asignadoA;
     private String limite;
     private Double avance;
     private String ultimoCambio;
     private String estado;
     private String tester;
     private String descripcion;
-    private String FechaCreacion;
+    private String fechaCreacion;
     private String produccion;
+    private String fileDir;
 
     
     /**
@@ -71,14 +86,14 @@ public class SingleCaseBean {
      * @return the FechaCreacion
      */
     public String getFechaCreacion() {
-        return FechaCreacion;
+        return fechaCreacion;
     }
 
     /**
      * @param FechaCreacion the FechaCreacion to set
      */
     public void setFechaCreacion(String FechaCreacion) {
-        this.FechaCreacion = FechaCreacion;
+        this.fechaCreacion = FechaCreacion;
     }
 
     /**
@@ -123,11 +138,11 @@ public class SingleCaseBean {
     }
 
     public String getAsignadoA() {
-        return AsignadoA;
+        return asignadoA;
     }
 
     public void setAsignadoA(String AsignadoA) {
-        this.AsignadoA = AsignadoA;
+        this.asignadoA = AsignadoA;
     }
 
     public String getLimite() {

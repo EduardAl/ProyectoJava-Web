@@ -247,7 +247,7 @@ public class RequestController extends HttpServlet {
             //copy binary contect to output stream
             while(fileIn.read(outputByte, 0, 4096) != -1)
             {
-                    out.write(outputByte, 0, 4096);
+                out.write(outputByte, 0, 4096);
             }
             fileIn.close();
             out.flush();
@@ -269,6 +269,7 @@ public class RequestController extends HttpServlet {
             {
                 String operacion = request.getParameter("op");
                 if (operacion.equals("eliminar")) {
+                    eliminarArchivo(requestModel.regresarFileDir(peticion));
                     requestModel.eliminarPeticion(peticion);
                     request.setAttribute("MensajeExito", "La peticion fue Eliminada");
                     request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
@@ -338,7 +339,6 @@ public class RequestController extends HttpServlet {
                         File uploadedFile  = new File(dirPc);
                         //se guarda
                         item.write(uploadedFile);
-                        System.out.println("Fin Escribir");
                     }
                     //Aqui se procesan los demas tipos de input del form
                     else
