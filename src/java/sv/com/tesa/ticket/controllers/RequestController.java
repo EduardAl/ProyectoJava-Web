@@ -59,15 +59,12 @@ public class RequestController extends HttpServlet {
             
 HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
-                System.out.println("Entra if1");
                 sesion.getAttribute("nombre");
                 if (!sesion.getAttribute("rol").toString().equals("Jefe de área funcional") && !sesion.getAttribute("rol").toString().equals("Jefe de desarrollo")) {
-                    System.out.println("Entra if2");
                     request.setAttribute("Error", "Error de usuario.");
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
             } else {
-                System.out.println("Entra else");
                 request.setAttribute("Error", "Debe iniciar sesión.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
