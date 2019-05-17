@@ -58,9 +58,10 @@ public class UsersModel extends Conexion
     public Usuarios obtenerUsuario(Integer id)
     {
         try {
-            String sql = "CALL sp_select_individual_user(?);";
+            String sql = "CALL sp_select_individual_user(?)";
             this.conectar();
             st = conexion.prepareStatement(sql);
+            
             st.setInt(1, id);
             rs = st.executeQuery();
             Usuarios usuarios = new Usuarios();

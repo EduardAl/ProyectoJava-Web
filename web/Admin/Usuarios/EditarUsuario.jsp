@@ -139,5 +139,6 @@
             $('#rol').select2();
         </script>
     </body>
+    <jsp:include page="/footer.jsp"/>
 </html>
 

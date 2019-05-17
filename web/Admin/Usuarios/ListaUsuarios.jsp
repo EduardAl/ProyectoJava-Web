@@ -2,9 +2,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <head>
     <jsp:include page="/cabecera.jsp"/>
-
-    <body onload="">
+    </head>
+    <body>
         <jsp:include page="/menu.jsp"/>
         <div class="container col-11" style="max-width: 80%">
             <div class="row mt-4 ml-3">
@@ -38,7 +39,8 @@
                                     <td align="center" class="w-auto">
                                         <div class="btn-group">
                                             <a style="margin-left: 5px" class="btn btn-warning" data-toggle="tooltip" data-html="true" title="Modificar" data-placement="bottom" href="${pageContext.request.contextPath}/usuarios?op=obtener&id=${usuario.id}"><em class="oi oi-document text-white"></em></a>
-                                            <a style="margin-left: 5px" class="btn btn-danger" data-toggle="tooltip" data-html="true" title="Eliminar" data-placement="bottom" href="${pageContext.request.contextPath}/usuarios?op=eliminar&id=${usuario.id}"><em class="oi oi-trash text-white"></em></a>
+                                            <a style="margin-left: 5px" class="btn btn-danger" data-toggle="tooltip" data-html="true" title="Eliminar" data-placement="bottom" href="javascript:eliminar(${usuario.id})"><em class="oi oi-trash text-white"></em></a>
+
                                             <script>
                                                 $(document).ready(function () {
                                                     $('[data-toggle="tooltip"]').tooltip();
@@ -53,6 +55,7 @@
                 </div>
             </div>                    
         </div> 
+    <jsp:include page="/footer.jsp"/>
         <script>
             <c:if test="${not empty exito}">
             alertify.success('${exito}');
@@ -62,7 +65,14 @@
             alertify.error('${fracaso}');
                 <c:set var="fracaso" value="" scope="session" />
             </c:if>
+                function eliminar(id) {
+                alertify.confirm("¿Realmente decea eliminar a este empleado?", function (e) {
+                    if (e) {
+                        location.href = "${pageContext.request.contextPath}/usuarios?op=eliminar&id=" + id;
+                    }
+                });
+
+            }
         </script>
-        <script src="/assets/js/alertify.js" type="text/javascript"></script>
     </body>
 </html>

@@ -25,9 +25,13 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import sv.com.tesa.ticket.beans.LoginBean;
 import sv.com.tesa.ticket.models.RequestModel;
 import sv.com.tesa.ticket.beans.RequestBean;
+import sv.com.tesa.ticket.beans.SingleRequestBean;
+
 /**
  *
  * @author eduar
@@ -44,27 +48,29 @@ public class RequestController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 1024 * 5;
-    static Logger log = Logger.getLogger(DepartmentController.class.getName());
+    static Logger log = Logger.getLogger(RequestController.class.getName());
     private RequestModel requestModel = new RequestModel();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("text/html; charset=UTF8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession sesion = request.getSession(false);
+            
+HttpSession sesion = request.getSession(false);
             if (sesion.getAttribute("nombre") != null && sesion.getAttribute("nombre") != "null") {
+                System.out.println("Entra if1");
                 sesion.getAttribute("nombre");
-                if (!sesion.getAttribute("rol").toString().equals("Jefe de área funcional")) {
+                if (!sesion.getAttribute("rol").toString().equals("Jefe de área funcional") && !sesion.getAttribute("rol").toString().equals("Jefe de desarrollo")) {
+                    System.out.println("Entra if2");
                     request.setAttribute("Error", "Error de usuario.");
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
             } else {
+                System.out.println("Entra else");
                 request.setAttribute("Error", "Debe iniciar sesión.");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
             }
-
             String operacion = request.getParameter("op");
             switch (operacion) {
                 case "listar":
@@ -87,6 +93,9 @@ public class RequestController extends HttpServlet {
                     break;
                 case "modificarBase":
                     modificarBase(request, response);
+                    break;
+                case "individualRequest":
+                    getSingleRequest(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -156,24 +165,22 @@ public class RequestController extends HttpServlet {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
             if (isMultipart) {
-                
+
                 RequestBean peticion = new RequestBean();
                 FileItemFactory factory = new DiskFileItemFactory();
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                
+
                 //Obtiene el directorio de context.xml
                 ServletContext context = getServletContext();
                 String storeLocation = context.getInitParameter("FileLocation");
-                
+
                 List items = upload.parseRequest(request);
                 Iterator iterador = items.iterator();
-                while(iterador.hasNext())
-                {
-                    FileItem item = (FileItem)iterador.next();
-                    
+                while (iterador.hasNext()) {
+                    FileItem item = (FileItem) iterador.next();
+
                     //Esto lee todo los input de tipo file
-                    if (!item.isFormField()) 
-                    {
+                    if (!item.isFormField()) {
                         String fileName = item.getName();
                         File path = new File(storeLocation);
                         //Si no existe se crea el directorio
@@ -185,24 +192,20 @@ public class RequestController extends HttpServlet {
                         String dirPc = storeLocation + File.separator + dirFile;
                         peticion.setFileDir(dirFile);
                         //Se crea el documento a guardar
-                        File uploadedFile  = new File(dirPc);
+                        File uploadedFile = new File(dirPc);
                         //se guarda
                         item.write(uploadedFile);
-                    }
-                    //Aqui se procesan los demas tipos de input del form
-                    else
-                    {
-                        if (item.getFieldName().equals("title")) 
-                        {
-                            peticion.setTitle(item.getString());
+                    } //Aqui se procesan los demas tipos de input del form
+                    else {
+                        if (item.getFieldName().equals("title")) {
+                            System.out.println(new String(item.getString().getBytes("ISO-8859-1"),"UTF-8"));
+                            peticion.setTitle(new String(item.getString().getBytes("ISO-8859-1"),"UTF-8"));
                         }
-                        if (item.getFieldName().equals("request-type")) 
-                        {
+                        if (item.getFieldName().equals("request-type")) {
                             peticion.setRequestType(Integer.parseInt(item.getString()));
                         }
-                        if (item.getFieldName().equals("description")) 
-                        {
-                            peticion.setDescription(item.getString());
+                        if (item.getFieldName().equals("description")) {
+                            peticion.setDescription(new String(item.getString().getBytes("ISO-8859-1"),"UTF-8"));
                         }
                     }
                 }
@@ -224,49 +227,46 @@ public class RequestController extends HttpServlet {
         try {
             //Obtengo el nombre del archivo
             String fileName = request.getParameter("file");
-            
+
             //Esto hace que funcione, ni idea por que, lo lei en stack overflow
             response.reset();
-            
+
             //Obtengo el nombre de la carpeta donde estan
             ServletContext ctx = getServletContext();
             String storeLocation = ctx.getInitParameter("FileLocation");
-            
+
             //Obtengo el archivo de la carpeta
             File file = new File(storeLocation + File.separator + fileName);
-            
+
             //Set el tipo de contenido de la respuesta
             response.setContentType("application/octet-stream");
             response.setHeader("Content-Disposition", ("attachment;filename=" + fileName));
             response.setHeader("Content-Length", String.valueOf(file.length()));
-            
+
             FileInputStream fileIn = new FileInputStream(file);
             OutputStream out = response.getOutputStream();
-            
+
             byte[] outputByte = new byte[4096];
             //copy binary contect to output stream
-            while(fileIn.read(outputByte, 0, 4096) != -1)
-            {
-                    out.write(outputByte, 0, 4096);
+            while (fileIn.read(outputByte, 0, 4096) != -1) {
+                out.write(outputByte, 0, 4096);
             }
             fileIn.close();
             out.flush();
             out.close();
-            
-            
+
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
-    
+
     private void verificarEstadoRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
             RequestBean peticion = new RequestBean();
             peticion.setId(Integer.parseInt(request.getParameter("id")));
             String estado = requestModel.regresarEstado(peticion);
-            if (estado.equals("Solicitud rechazada")) 
-            {
+            if (estado.equals("Solicitud rechazada")) {
                 String operacion = request.getParameter("op");
                 if (operacion.equals("eliminar")) {
                     eliminarArchivo(requestModel.regresarFileDir(peticion));
@@ -275,18 +275,15 @@ public class RequestController extends HttpServlet {
                     request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
                     request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
                 }
-                if(operacion.equals("modificar"))
-                {
+                if (operacion.equals("modificar")) {
                     peticion.setCreatedBy(LoginBean.getId());
                     request.setAttribute("peticion", requestModel.listarPeticionIndividual(peticion));
                     request.setAttribute("listaTipoPeticiones", requestModel.listarTiposPeticion());
                     request.getRequestDispatcher("/Area/Funcional/Jefes/modificarPeticion.jsp").forward(request, response);
                 }
-            }
-            else{
+            } else {
                 String op = request.getParameter("op");
-                if (op.equals("modificar"))
-                {
+                if (op.equals("modificar")) {
                     request.setAttribute("ErrorModificar", "Solo se puede modificar una peticion rechazada");
                     request.setAttribute("listarPeticiones", requestModel.listarPeticiones());
                     request.getRequestDispatcher("/Area/Funcional/Jefes/listarPeticiones.jsp").forward(request, response);
@@ -301,30 +298,27 @@ public class RequestController extends HttpServlet {
             log.error("Error: " + ex.getMessage());
         }
     }
-    
-    private void modificarBase(HttpServletRequest request, HttpServletResponse response)
-    {
+
+    private void modificarBase(HttpServletRequest request, HttpServletResponse response) {
         try {
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
-            if (isMultipart){
+            if (isMultipart) {
                 RequestBean peticion = new RequestBean();
                 FileItemFactory factory = new DiskFileItemFactory();
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                
+
                 //Obtiene el directorio de context.xml
                 ServletContext context = getServletContext();
                 String storeLocation = context.getInitParameter("FileLocation");
-                
+
                 List items = upload.parseRequest(request);
                 Iterator iterador = items.iterator();
-                while(iterador.hasNext())
-                {
-                    FileItem item = (FileItem)iterador.next();
-                    
+                while (iterador.hasNext()) {
+                    FileItem item = (FileItem) iterador.next();
+
                     //Esto lee todo los input de tipo file
-                    if (!item.isFormField()) 
-                    {
+                    if (!item.isFormField()) {
                         String fileName = item.getName();
                         File path = new File(storeLocation);
                         //Si no existe se crea el directorio
@@ -336,27 +330,21 @@ public class RequestController extends HttpServlet {
                         String dirPc = storeLocation + File.separator + dirFile;
                         peticion.setFileDir(dirFile);
                         //Se crea el documento a guardar
-                        File uploadedFile  = new File(dirPc);
+                        File uploadedFile = new File(dirPc);
                         //se guarda
                         item.write(uploadedFile);
-                    }
-                    //Aqui se procesan los demas tipos de input del form
-                    else
-                    {
-                        if (item.getFieldName().equals("title")) 
-                        {
+                    } //Aqui se procesan los demas tipos de input del form
+                    else {
+                        if (item.getFieldName().equals("title")) {
                             peticion.setTitle(item.getString());
                         }
-                        if (item.getFieldName().equals("request-type")) 
-                        {
+                        if (item.getFieldName().equals("request-type")) {
                             peticion.setRequestType(Integer.parseInt(item.getString()));
                         }
-                        if (item.getFieldName().equals("description")) 
-                        {
+                        if (item.getFieldName().equals("description")) {
                             peticion.setDescription(item.getString());
                         }
-                        if (item.getFieldName().equals("hidden-file")) 
-                        {
+                        if (item.getFieldName().equals("hidden-file")) {
                             eliminarArchivo(item.getString());
                         }
                         if (item.getFieldName().equals("id")) {
@@ -373,13 +361,37 @@ public class RequestController extends HttpServlet {
             ex.printStackTrace();
         }
     }
-    
-    private boolean eliminarArchivo(String fileDir)
-    {
+
+    private boolean eliminarArchivo(String fileDir) {
         ServletContext ctx = getServletContext();
         String storeLocation = ctx.getInitParameter("FileLocation");
         File file = new File(storeLocation + File.separator + fileDir);
         return file.delete();
     }
-    
+
+    private void getSingleRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Integer codigo = Integer.parseInt(request.getParameter("id"));
+            SingleRequestBean requestBean = requestModel.obtenerPeticionIndividual(codigo);
+            PrintWriter out = response.getWriter();
+            response.setContentType("json");  // Set content type of the response so that jQuery knows what it can expect.
+ 
+            JSONObject member = new JSONObject();
+            member.put("codigo", String.valueOf(requestBean.getId()));
+            member.put("nombre", requestBean.getTitulo().toString());
+            member.put("tipo", requestBean.getTipoPeticion().toString());
+            member.put("departamento", requestBean.getDepartamento().toString());
+            member.put("descripcion", requestBean.getDescripcion().toString());
+            member.put("creado", requestBean.getCreadoPor().toString());
+            member.put("estado", requestBean.getEstado().toString());
+            member.put("fechac", requestBean.getFechaCreacion().toString());
+            String json = member.toString();
+            out.write(json);
+            System.out.println("JSON " + json);
+            out.close();
+        } catch (IOException ex) {
+            log.error("Error: " + ex.getMessage());
+        }
+    }
+
 }
