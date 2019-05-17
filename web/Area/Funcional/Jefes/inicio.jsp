@@ -30,5 +30,7 @@
     </head>
     <body>
         <h1>Ha iniciado sesión como <% out.print(sesion.getAttribute("rol")); %> </h1>
+        <a class="dropdown-item" href="${pageContext.request.contextPath}/event">
+                        <span class="oi oi-person"></span>  Timeline</a>
     </body>
 </html>
