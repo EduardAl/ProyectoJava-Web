@@ -3,18 +3,19 @@
 <!DOCTYPE html>
 <html>
     <jsp:include page="/cabecera.jsp"/>
+
     <body onload="">
         <jsp:include page="/menu.jsp"/>
-        <div class="container col-11">
-            <div class="row">
+        <div class="container col-11" style="max-width: 80%">
+            <div class="row mt-4 ml-3">
                 <h3>Lista de usuarios</h3>
             </div>
             <div>
-                <div class="col-md-12 table-responsive-sm">
-                    <a type="button" class="btn btn-dark" href="${pageContext.request.contextPath}/usuarios?op=nuevo"><span class="oi oi-plus"></span> Nuevo usuario</a>
+                <div class="col-md-12 table-responsive-sm mt-4">
+                    <a type="button" class="btn btn-dark" style="background-color: #043E60" href="${pageContext.request.contextPath}/usuarios?op=nuevo"><span class="oi oi-plus"></span> Nuevo usuario</a>
                     <br><br>
-                    <table class="table table-striped table-bordered table-hover mt-4 ">
-                        <thead style="background-color:#3D3F46 ;color:white">
+                    <table class="table table-striped table-bordered table-hover mt-4">
+                        <thead style="background-color:#3D3F46 ;color:white; text-align: center">
                             <tr>
                                 <th>Codigo de usuario</th>
                                 <th>Nombre</th>
@@ -28,7 +29,7 @@
                         <tbody>
                             <c:forEach items="${requestScope.listarUsuarios}" var="usuario">
                                 <tr>
-                                    <td>${usuario.id}</td>
+                                    <td style="text-align: center">${usuario.id}</td>
                                     <td>${usuario.fname}</td>
                                     <td>${usuario.lname}</td>
                                     <td>${usuario.email}</td>
@@ -62,7 +63,6 @@
                 <c:set var="fracaso" value="" scope="session" />
             </c:if>
         </script>
-
         <script src="/assets/js/alertify.js" type="text/javascript"></script>
     </body>
 </html>
