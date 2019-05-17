@@ -81,11 +81,6 @@
         </c:if>
 
 
-
-       
-
-
-
         <div class="modal fade" id="modaladd">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
@@ -165,7 +160,17 @@
                                     <textarea id="comment_rem" name="comment" readonly="true" class="form-control" rows="3" placeholder="Ingresa el comentario" ></textarea>
                                 </div>
 
-                            </div>
+                                    <input class="form-control" type="hidden" name="case_id" value="${requestScope.singleCaseBean.id}" />
+
+                                    <div class="form-group">
+                                        <label for="comentario">Comentario:</label>
+                                        <!--Material textarea-->
+                                        <div class="form-group">
+                                            <textarea rows="5" id="comment" name="comment" class="form-control" rows="3" placeholder="Ingresa el comentario" required></textarea>
+
+                                        </div>
+
+                                    </div>
 
                                 <div class="form-group">
                                 <label for="percent">Porcentaje:</label>
@@ -185,11 +190,11 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
 
-                        
+
                         <div class="row">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
-                        
+
                     </div>
 
                 </div>

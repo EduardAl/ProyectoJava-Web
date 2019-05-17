@@ -6,7 +6,7 @@
 package sv.com.tesa.ticket.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter; 
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +35,6 @@ public class LoginController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Logger LOGGER = Logger.getLogger(LoginController.class);
-            LOGGER.info("This is a logging statement from log4j");
             /* TODO output your page here. You may use following sample code. */
             String correo;
             String password;
@@ -92,15 +91,17 @@ public class LoginController extends HttpServlet {
                         }
                     } else {
                         request.setAttribute("fracaso", usuario.getError());
+                        LOGGER.error(usuario.getError());
                         rd = request.getRequestDispatcher("index.jsp");
                         rd.forward(request, response);
                     }
 
                 }
             } catch (IOException | ServletException e) {
+                LOGGER.error(e.getMessage());
             }
         } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Priority.ERROR, ex.getMessage());
+            Logger.getLogger(LoginController.class).error(ex.getMessage());
         }
     }
 

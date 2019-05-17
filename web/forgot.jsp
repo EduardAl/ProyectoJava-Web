@@ -52,7 +52,17 @@ Author     : eduar
                                 </form>
                             </div>
                         </div>
-                        <div class="footer">
+                        <div class="footer"><jsp:include page="/footer.jsp"/>
+                            <script>
+                                <c:if test="${not empty exito}">
+                                alertify.success('${exito}');
+                                    <c:set var="exito" value="" scope="session" />
+                                </c:if>
+                                <c:if test="${not empty fracaso}">
+                                alertify.error('${fracaso}');
+                                    <c:set var="fracaso" value="" scope="session" />
+                                </c:if>
+                            </script>
                             Copyright &copy; 2019 &mdash; Telecomunicaciones Salvadoreñas 
                         </div>
                     </div>
