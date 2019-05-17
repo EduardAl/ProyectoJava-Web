@@ -31,6 +31,7 @@ import sv.com.tesa.ticket.beans.RequestBean;
 import static sv.com.tesa.ticket.controllers.RequestController.log;
 import sv.com.tesa.ticket.models.CasesModel;
 import sv.com.tesa.ticket.models.RequestModel;
+import sv.com.tesa.ticket.models.UsersModel;
 
 /**
  *
@@ -90,6 +91,9 @@ public class CaseController extends HttpServlet {
                     break;
                 case "obtener":
                     obtenerDocPeticion(request, response);
+                    break;
+                case "tester":
+                    asignarTester(request, response);
                     break;
                 default:
                     throw new AssertionError();
@@ -276,6 +280,9 @@ public class CaseController extends HttpServlet {
     private void listarCasos(HttpServletRequest request, HttpServletResponse response)
     {
         try {
+            UsersModel usersModel = new UsersModel();
+            HttpSession sesion = request.getSession(false);
+            request.setAttribute("listarEmpleados", usersModel.listarUsuariosDepartamento((String) sesion.getAttribute("departamento")));
             request.setAttribute("listaCasos", caseModel.listarCasos());
             request.getRequestDispatcher("/Area/Desarrollo/Jefes/listaCasos.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
@@ -319,6 +326,21 @@ public class CaseController extends HttpServlet {
             
         } catch (IOException ex) {
             log.error("Error: " + ex.getMessage());
+        }
+    }
+
+    private void asignarTester(HttpServletRequest request, HttpServletResponse response) {
+        String idCaso = request.getParameter("idc");
+        Integer idTester = Integer.parseInt(request.getParameter("empleados"));
+        if(caseModel.addTester(idCaso, idTester))
+        {
+            request.setAttribute("exito", "Tester cambiado con éxito");
+            listarCasos(request, response);
+        }
+        else
+        {
+            request.setAttribute("fracaso", "Ocurrió un error al cambiar tester.");
+            listarCasos(request, response);
         }
     }
 }
