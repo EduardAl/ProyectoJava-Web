@@ -34,8 +34,7 @@ public class UserController extends HttpServlet {
     AdminDeptModel adminDeptModel = new AdminDeptModel();
     AdminBossModel adminBossModel = new AdminBossModel();
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html; charset=Latin1");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession(false);
@@ -43,11 +42,19 @@ public class UserController extends HttpServlet {
                 sesion.getAttribute("nombre");
                 if (!sesion.getAttribute("rol").toString().equals("Administrador")) {
                     request.setAttribute("Error", "Error de usuario.");
-                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                    try {
+                        request.getRequestDispatcher("index.jsp").forward(request, response);
+                    } catch (ServletException ex) {
+                        java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             } else {
                 request.setAttribute("Error", "Debe iniciar sesión.");
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                try {
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                } catch (ServletException ex) {
+                    log.error(ex.getMessage());
+                }
             }
             String operacion = request.getParameter("op");
             switch (operacion) {
@@ -69,9 +76,14 @@ public class UserController extends HttpServlet {
                 case "eliminar":
                     eliminar(request, response);
                     break;
+                case "password":
+                    password(request, response);
+                    break;
                 default:
                     throw new AssertionError();
             }
+        } catch (IOException ex) {
+            log.error(ex.getMessage());
         }
     }
 
@@ -84,11 +96,7 @@ public class UserController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            processRequest(request, response);
-        } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -119,8 +127,8 @@ public class UserController extends HttpServlet {
         try {
             request.setAttribute("listarUsuarios", modelo.listarUsuarios());
             request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
-        } catch (SQLException | ServletException | IOException ex) {
-            log.error("Error: " + ex.getMessage());
+        } catch (ServletException | IOException ex) {
+            log.error(ex.getMessage());
         }
     }
 
@@ -131,7 +139,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("listarEmpleados", adminBossModel.listarEmpleados());
             request.getRequestDispatcher("/Admin/Usuarios/NuevoUsuario.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -141,21 +149,21 @@ public class UserController extends HttpServlet {
             employeeBean.setApellido(request.getParameter("apellido"));
             employeeBean.setDepartamento(request.getParameter("departamento"));
             employeeBean.setEmail(request.getParameter("correo"));
-            employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            if (request.getParameter("jefe") != null && !request.getParameter("jefe").equals("")) {
+                employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            } else {
+                employeeBean.setJefe(0);
+            }
             employeeBean.setNombre(request.getParameter("nombre"));
             employeeBean.setRol(Integer.parseInt(request.getParameter("rol")));
 
             if (adminBossModel.ingresarEmpleado(employeeBean)) {
                 request.setAttribute("usuario", employeeBean);
-                try {
-                    request.setAttribute("listarUsuarios", modelo.listarUsuarios());
-                } catch (SQLException ex) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -169,7 +177,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("listarEmpleados", adminBossModel.listarEmpleados());
             request.getRequestDispatcher("/Admin/Usuarios/EditarUsuario.jsp").forward(request, response);
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -179,48 +187,76 @@ public class UserController extends HttpServlet {
             employeeBean.setApellido(request.getParameter("apellido"));
             employeeBean.setDepartamento(request.getParameter("departamento"));
             employeeBean.setEmail(request.getParameter("correo"));
-            employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            if (request.getParameter("jefe") != null && !request.getParameter("jefe").equals("")) {
+                employeeBean.setJefe(Integer.parseInt(request.getParameter("jefe")));
+            } else {
+                employeeBean.setJefe(0);
+            }
             employeeBean.setNombre(request.getParameter("nombre"));
             employeeBean.setRol(Integer.parseInt(request.getParameter("rol")));
             employeeBean.setId(Integer.parseInt(request.getParameter("id")));
             employeeBean.setPassword(null);
             if (adminBossModel.modificarJefe(employeeBean, false)) {
-                try {
-                    request.setAttribute("listarUsuarios", modelo.listarUsuarios());
-                } catch (SQLException ex) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             }
         } catch (ServletException | IOException ex) {
-            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
         if (modelo.eliminarEmpleado(Integer.parseInt(request.getParameter("id")))) {
             try {
-                try {
-                    request.setAttribute("listarUsuarios", modelo.listarUsuarios());
-                } catch (SQLException ex) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
+                request.setAttribute("exito", "Usuario eliminado correctamente");
+                request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
-                java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex.getMessage());
             }
         } else {
             try {
-                request.setAttribute("error", "No se puede eliminar");
-                try {
-                    request.setAttribute("listarUsuarios", modelo.listarUsuarios());
-                } catch (SQLException ex) {
-                    java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                request.setAttribute("fracaso", "No se puede eliminar");
+                request.setAttribute("listarUsuarios", modelo.listarUsuarios());
                 request.getRequestDispatcher("/Admin/Usuarios/ListaUsuarios.jsp").forward(request, response);
             } catch (ServletException | IOException ex) {
-                java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex.getMessage());
             }
+        }
+    }
+
+    private void password(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        try {
+            String url1 = request.getRequestURL().toString();
+            String queryString = request.getQueryString();
+            System.out.println(queryString);
+            if (modelo.modificarOldPassword(Integer.parseInt(session.getAttribute("id").toString()), request.getParameter("passwd"), request.getParameter("oldPassword"))) {
+                try {
+                    request.setAttribute("Success", "Contraseña cambiada correctamente.");
+                    request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
+                } catch (ServletException | IOException ex) {
+                    log.error(ex.getMessage());
+                    request.setAttribute("Error", "Ocurrió un problema.\nNo se cambió la contraseña");
+                    try {
+                        request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
+                    } catch (ServletException | IOException ex1) {
+                        log.error(ex.getMessage());
+                    }
+
+                }
+            } else {
+                request.setAttribute("Error", "Ocurrió un problema.\nNo se cambió la contraseña");
+                try {
+                    request.getRequestDispatcher("/cerrarSesion.jsp").forward(request, response);
+                } catch (ServletException | IOException ex1) {
+                    log.error(ex1.getMessage());
+                }
+            }
+
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage());
         }
     }
 }

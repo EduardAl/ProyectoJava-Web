@@ -5,6 +5,7 @@
  */
 package sv.com.tesa.ticket.models;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -65,7 +66,13 @@ public class AdminBossModel extends Conexion{
             st.setString(6, beanEmpleado.getPassword());
             st.setString(7, beanEmpleado.getDepartamento());
             st.setBoolean(8, op);
-            st.setInt(9, beanEmpleado.getJefe());
+            if (beanEmpleado.getJefe() != 0) {
+                st.setInt(9, beanEmpleado.getJefe());
+            }
+            else
+            {
+                st.setNull(9, Types.NULL);
+            }
             
             int resultado = st.executeUpdate();
             this.desconectar();
@@ -139,7 +146,14 @@ public class AdminBossModel extends Conexion{
             st.setString(2, empleado.getNombre());
             st.setString(3, empleado.getApellido());
             st.setString(4, empleado.getEmail());
-            st.setInt(5, empleado.getJefe());
+            if (empleado.getJefe() != 0) {
+                st.setInt(5, empleado.getJefe());
+            }
+            else
+            {
+                st.setNull(5, Types.NULL);
+            }
+                   
             st.setString(6, empleado.getDepartamento());
             
             int res = st.executeUpdate();

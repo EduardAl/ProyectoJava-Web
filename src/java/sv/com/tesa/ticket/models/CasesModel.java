@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -25,43 +26,39 @@ import sv.com.tesa.ticket.utils.Utilidades;
  * @author eduar
  */
 public class CasesModel extends Conexion{
-
-    private JTable tabla;
  
-    public JTable listarCasos(){
+    public ArrayList<SingleCaseBean> listarCasos(){
         try{
-            String sql = "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
-                "concat(t.fname,' ',t.lname) AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
-                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
-                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
-                "INNER JOIN employees t ON c.tester = t.id \n" +
-                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
-                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
-                "where r.department = (select id from departments where dname = 'Departamento de Sistemas')\n" +
-                "UNION ALL\n" +
-                "SELECT c.id AS IdCaso, r.title AS Caso, c.descrip AS Descripcion, c.percent AS porcentaje, \n" +
-                "null AS Tester, concat(a.fname, ' ', a.lname) AS Asignado, \n" +
-                "cs.cs_name AS Estado, c.deadline AS Finalizacion \n" +
-                "from cases c INNER JOIN requests r ON c.request = r.id \n" +
-                "INNER JOIN employees a ON c.assigned_to = a.id \n" +
-                "INNER JOIN case_status cs ON c.case_status = cs.id \n" +
-                "where r.department = (select id from departments where dname =  '" + LoginBean.getDepartamento() + "') and tester is null";
+            ArrayList <SingleCaseBean> lista = new ArrayList<>();
+            String sql = "select cases.id, requests.title, cases.descrip, cases.percent, \n" +
+                            "concat(employees.fname, ' ', employees.lname) as 'asignado',\n" +
+                            "case_status.cs_name, cases.deadline, cases.file_dir from cases \n" +
+                            "inner join requests on cases.request = requests.id\n" +
+                            "inner join employees on cases.assigned_to = employees.id\n" +
+                            "inner join case_status on cases.case_status = case_status.id \n" +
+                            "where requests.department in (select departments.id from departments where departments.dname = ?);";
             this.conectar();
             st = conexion.prepareStatement(sql);
-            boolean resultado = st.execute();
-            
-            if(resultado){
-                rs = st.getResultSet();
-                String[] col = {"IdCaso", "Caso", "Descripcion", "Porcentaje", "Tester", "Asignado", "Estado", "Fecha_Finalizacion"};
-                tabla = Utilidades.cargarTabla(col, rs);
+            st.setString(1, LoginBean.getDepartamento());
+            rs = st.executeQuery();
+            while(rs.next()){
+                SingleCaseBean obj = new SingleCaseBean();
+                obj.setId(rs.getString("id"));
+                System.out.println(obj.getId());
+                obj.setTitulo(rs.getString("title"));
+                obj.setDescripcion(rs.getString("descrip"));
+                obj.setAvance(rs.getDouble("percent"));
+                obj.setAsignadoA(rs.getString("asignado"));
+                obj.setEstado(rs.getString("cs_name"));
+                obj.setLimite(rs.getString("deadline"));
+                obj.setFileDir(rs.getString("file_dir"));
+                lista.add(obj);
             }
-            else{
-                tabla = null;
-            }
-            return tabla;
+            return lista;
         }catch(SQLException ex){
             Logger.getLogger(CasesModel.class).error("Error al listar "
                     + "casos en CasesModel función listarCasos",ex);
+            ex.printStackTrace();
             return null;
         }
         finally    
@@ -71,6 +68,56 @@ public class CasesModel extends Conexion{
                 this.desconectar();
             } catch (SQLException ex) {
                 Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    
+    public ArrayList<SingleCaseBean> listarCasosPorDesarrollador(){
+        try{
+            ArrayList <SingleCaseBean> lista = new ArrayList<>();
+            String sql = "select cases.id, requests.title, cases.descrip, cases.percent, \n" +
+                            "concat(employees.fname, ' ', employees.lname) as 'asignado',\n" +
+                            "case_status.cs_name, cases.deadline, cases.file_dir from cases \n" +
+                            "inner join requests on cases.request = requests.id\n" +
+                            "inner join employees on cases.assigned_to = employees.id\n" +
+                            "inner join case_status on cases.case_status = case_status.id \n" +
+                            "where requests.department in (select departments.id from departments where departments.dname = ?)" +
+                            " and assigned_to = ? ;";
+            this.conectar();
+            st = conexion.prepareStatement(sql);
+            st.setString(1, LoginBean.getDepartamento());
+            st.setInt(2, LoginBean.getId());
+            rs = st.executeQuery();
+            while(rs.next()){
+                SingleCaseBean obj = new SingleCaseBean();
+                obj.setId(rs.getString("id"));
+                System.out.println(obj.getId());
+                obj.setTitulo(rs.getString("title"));
+                obj.setDescripcion(rs.getString("descrip"));
+                obj.setAvance(rs.getDouble("percent"));
+                obj.setAsignadoA(rs.getString("asignado"));
+                obj.setEstado(rs.getString("cs_name"));
+                obj.setLimite(rs.getString("deadline"));
+                obj.setFileDir(rs.getString("file_dir"));
+                lista.add(obj);
+            }
+            return lista;
+        }catch(SQLException ex){
+            Logger.getLogger(CasesModel.class).error("Error al listar "
+                    + "casos en CasesModel función listarCasos",ex);
+            ex.printStackTrace();
+            return null;
+        }
+        finally    
+        {
+                    
+            try {
+                this.desconectar();
+            } catch (SQLException ex) {
+                Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+                ex.printStackTrace();
             }
         }
     }
@@ -186,26 +233,28 @@ public class CasesModel extends Conexion{
     public boolean ingresarCaso(CaseBean caso)
     {
         try {
-            String sql = "call sp_insert_new_case(?,?,?,?,?,?)";
+            String sql = "call sp_insert_new_case(?,?,?,?,?,?,?)";
             this.conectar();
             st = conexion.prepareCall(sql);
             st.setString(1, caso.getDepartamento());
             st.setString(2, caso.getId());
             st.setInt(3, caso.getIdSolicitud());
             st.setInt(4, caso.getEmpleadoAsignado());
-            DateFormat formato = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+            DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedDate = formato.parse(caso.getFechaLimite());
             Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
             st.setTimestamp(5, timestamp);
             st.setString(6, caso.getDescripcion());
+            st.setString(7, caso.getFileDir());
             
             int resultado = st.executeUpdate();
             this.desconectar();
             return resultado > 0;
             
         } catch (SQLException | ParseException e) {
-            Logger.getLogger(CasesModel.class).error("Error al ingresar "
-                    + "un caso en CasesModel función IngresarCaso",e);
+           // Logger.getLogger(CasesModel.class).error("Error al ingresar "
+            //        + "un caso en CasesModel función IngresarCaso",e);
+            e.printStackTrace();
             return false;
         }
         finally{
@@ -213,7 +262,8 @@ public class CasesModel extends Conexion{
          try {
              this.desconectar();
          } catch (SQLException ex) {
-             Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+             //Logger.getLogger(CasesModel.class.getName()).log(null, ex);
+             ex.printStackTrace();
          }
         }
     }
@@ -238,4 +288,26 @@ public class CasesModel extends Conexion{
      }
      return false;
     }
+    
+   public boolean addTester(String idCase, Integer idEmp)
+   {
+       try{
+           String sql = "call sp_update_case_tester(?,?)";
+           this.conectar();
+           st = conexion.prepareCall(sql);
+           st.setString(1, idCase);
+           st.setInt(2, idEmp);
+           int resultado = st.executeUpdate();            
+            if (resultado > 0) {
+                this.desconectar();
+                return true;
+            }
+            this.desconectar();
+            return false;
+       }catch(Exception ex){
+           Logger.getLogger(AdminDeptModel.class).error("Error al actualizar "
+                    + "casos en función modificarCasoJefeDesarrollo",ex);
+            return false;
+       }
+   }
 }

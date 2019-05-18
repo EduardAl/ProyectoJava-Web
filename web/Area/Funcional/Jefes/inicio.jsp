@@ -5,30 +5,18 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page session="true" %>
-<% HttpSession sesion = request.getSession(false); 
-    if(sesion.getAttribute("nombre") != null)
-    {
-        sesion.getAttribute("nombre");
-        if(!sesion.getAttribute("rol").toString().equals("Jefe de área funcional"))
-        {
-            sesion.setAttribute("Error", "Error de usuario.");
-            response.sendRedirect("../index.jsp");
-        }
-    }
-    else
-    {
-        sesion.setAttribute("Error", "Debe iniciar sesión.");
-        response.sendRedirect("../index.jsp");
-    }
-%>
+<%@page session="true"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <jsp:include page="/cabecera.jsp"/>
         <title>Inicio</title>
     </head>
     <body>
-        <h1>Ha iniciado sesión como <% out.print(sesion.getAttribute("rol")); %> </h1>
+        <jsp:include page="/Area/Funcional/Jefes/menu.jsp"/>/
+        <a class="dropdown-item" href="${pageContext.request.contextPath}/event">
+            <span class="oi oi-person"></span>  Timeline</a>
     </body>
+        <jsp:include page="/footer.jsp"/>
 </html>

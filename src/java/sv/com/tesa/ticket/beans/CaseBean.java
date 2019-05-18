@@ -13,7 +13,36 @@ import java.sql.Timestamp;
  */
 public class CaseBean {
 
+    /**
+     * @return the comentario
+     */
+    public String getComentario() {
+        return comentario;
+    }
 
+    /**
+     * @param comentario the comentario to set
+     */
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
+
+    /**
+     * @return the fileDir
+     */
+    public String getFileDir() {
+        return fileDir;
+    }
+
+    /**
+     * @param fileDir the fileDir to set
+     */
+    public void setFileDir(String fileDir) {
+        this.fileDir = fileDir;
+    }
+
+
+    private String comentario;
     private String id;
     private int idSolicitud;
     private int empleadoAsignado;
@@ -26,6 +55,7 @@ public class CaseBean {
     private String fechaActualizacion;
     private String fechaImplementacion;
     private String departamento;
+    private String fileDir;
     
     public CaseBean()
     {
